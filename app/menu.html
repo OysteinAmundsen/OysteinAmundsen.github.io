@@ -1,0 +1,25 @@
+<template id="template">
+  <style>
+  </style>
+  <nav>
+      Menubar
+  </nav>
+</template>
+
+<script>
+  'use strict';
+  var impDocPoly = document._currentScript.ownerDocument; // importee
+  class xMenu extends HTMLElement {
+    constructor() {
+      super();
+    }
+
+    createdCallback() {
+      var template = impDocPoly.querySelector('#template');
+      var clone    = document.importNode(template.content, true);
+      this.root    = this.createShadowRoot();
+      this.root.appendChild(clone);
+    }
+  }
+  document.registerElement('x-menu', xMenu);
+</script>
