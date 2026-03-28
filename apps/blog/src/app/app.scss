@@ -1,0 +1,131 @@
+:host {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+
+  router-outlet {
+    display: none;
+  }
+}
+
+// Header
+.site-header {
+  view-transition-name: header;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--header-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-12) var(--spacing-16);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-6);
+  color: var(--on-surface);
+  text-decoration: none;
+
+  .material-icons {
+    color: var(--primary);
+    font-size: 1.5rem;
+  }
+}
+
+.logo-text {
+  font-family: var(--font-headline);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.nav {
+  display: flex;
+  gap: var(--spacing-16);
+  place-items: center;
+}
+
+.nav-link {
+  font-family: var(--font-label);
+  font-size: 0.8125rem;
+  color: var(--on-surface-variant);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: color 120ms ease-out;
+
+  &:hover {
+    color: var(--primary);
+  }
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--on-surface-variant);
+  cursor: pointer;
+  padding: var(--spacing-4);
+  border-radius: var(--rounded-md);
+  transition:
+    color 120ms ease-out,
+    background 120ms ease-out;
+
+  .material-icons {
+    font-size: 1.25rem;
+  }
+
+  &:hover {
+    color: var(--primary);
+    background: var(--surface-container);
+  }
+}
+
+// Footer
+.site-footer {
+  border-top: 1px solid var(--ghost-border);
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-16);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-8);
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  font-family: var(--font-headline);
+  font-size: 0.875rem;
+  color: var(--on-surface-variant);
+
+  .material-icons {
+    font-size: 1rem;
+    color: var(--primary);
+  }
+}
+
+.footer-copy {
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  color: var(--on-surface-variant);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}

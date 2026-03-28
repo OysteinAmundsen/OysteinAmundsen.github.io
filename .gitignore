@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+.npm
+
+# Build output
+dist/
+tmp/
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# NX
+.nx/cache
+.nx/workspace-data
+
+# Secrets
+.vscode/mcp.json
+
+# Misc
+*.log

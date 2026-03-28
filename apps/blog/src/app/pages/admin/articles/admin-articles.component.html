@@ -1,0 +1,73 @@
+<div class="admin-articles">
+  <span class="breadcrumb">Database / Archive</span>
+
+  <div class="page-header">
+    <div>
+      <h2>Article Management</h2>
+      <p class="page-subtitle">
+        Systematic overview of the editorial pipeline. Manage metadata,
+        deployment status, and content lifecycle from a unified terminal view.
+      </p>
+    </div>
+    <button class="btn btn--primary" (click)="newArticle()">
+      <span class="material-icons">add</span>
+      New Article
+    </button>
+  </div>
+
+  <div class="search-bar">
+    <div class="search-input">
+      <span class="material-icons">search</span>
+      <input
+        type="text"
+        placeholder="Query Database: Title, ID, or Author..."
+        (input)="onSearch($event)"
+      />
+    </div>
+    <div class="search-actions">
+      <button class="btn btn--ghost search-status">
+        Status: All
+        <span class="material-icons">expand_more</span>
+      </button>
+      <button class="btn btn--ghost search-refine">
+        <span class="material-icons">filter_list</span>
+        Refine
+      </button>
+    </div>
+  </div>
+
+  <div class="grid-container">
+    <tbw-grid
+      [rows]="articles()"
+      [gridConfig]="gridConfig"
+      (rowClick)="onRowClick($event)"
+    />
+  </div>
+
+  <div class="stats-dashboard">
+    <div class="stat-card">
+      <span class="material-icons stat-icon">description</span>
+      <span class="stat-value">{{ totalCount() }}</span>
+      <span class="label">Total Articles</span>
+    </div>
+    <div class="stat-card">
+      <span class="material-icons stat-icon stat-icon--green">public</span>
+      <span class="stat-value">{{ publishedCount() }}</span>
+      <span class="label">Published</span>
+    </div>
+    <div class="stat-card">
+      <span class="material-icons stat-icon stat-icon--tertiary"
+        >edit_note</span
+      >
+      <span class="stat-value">{{ draftCount() }}</span>
+      <span class="label">Drafts</span>
+    </div>
+    <div class="stat-card">
+      <span class="material-icons stat-icon stat-icon--archived"
+        >inventory_2</span
+      >
+      <span class="stat-value">{{ archivedCount() }}</span>
+      <span class="label">Archived</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "art-1774731901773",
+    "title": "I've created a library",
+    "slug": "i-ve-created-a-library",
+    "excerpt": "Tired of reinventing the wheel? Discover `@toolbox-web/grid`, a versatile web component library offering ready-to-use grid functionality for Angular, React, and Vue, empowering you to focus on your application's unique needs.",
+    "coverImage": "/images/articles/1774734418208-grid_logo.png",
+    "status": "published",
+    "author": "Øystein Amundsen",
+    "readTime": "5 min",
+    "tags": [
+      "data-grid",
+      "webcomponents",
+      "angular",
+      "open-source"
+    ],
+    "createdAt": "2026-03-28T21:01:01.843Z",
+    "updatedAt": "2026-03-28T21:47:04.609Z",
+    "publishedAt": null
+  },
+  {
+    "id": "art-1774733400000",
+    "title": "Angular SSR meets NestJS: Lessons learned from a single Express instance",
+    "slug": "angular-ssr-meets-nestjs-lessons-learned",
+    "excerpt": "What happens when you run Angular's SSR engine and a full NestJS backend on the same Express server? A deep dive into the architecture, the gotchas, and the lessons learned from building a full-stack playground.",
+    "coverImage": "",
+    "status": "published",
+    "author": "Øystein Amundsen",
+    "readTime": "8 min",
+    "tags": [
+      "angular",
+      "nestjs",
+      "ssr",
+      "full-stack",
+      "express",
+      "lessons-learned"
+    ],
+    "createdAt": "2026-03-28T21:50:00.000Z",
+    "updatedAt": "2026-03-28T21:50:00.000Z",
+    "publishedAt": null
+  }
+]

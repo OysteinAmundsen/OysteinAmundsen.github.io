@@ -1,0 +1,92 @@
+<main class="feed">
+  <section class="hero">
+    <h1 class="hero-title">Latest Protocols</h1>
+    <p class="hero-subtitle">
+      Transmissions on frontend engineering, system architectures, and
+      high-performance web design.
+    </p>
+
+    <div class="search-bar">
+      <span class="material-icons search-icon">search</span>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search articles..."
+        [value]="searchQuery()"
+        (input)="onSearch($event)"
+      />
+    </div>
+
+    <div class="filter-bar">
+      <button
+        class="filter-chip"
+        [class.active]="activeTag() === ''"
+        (click)="filterByTag('')"
+      >
+        All Systems
+      </button>
+      @for (tag of allTags(); track tag) {
+        <button
+          class="filter-chip"
+          [class.active]="activeTag() === tag"
+          (click)="filterByTag(tag)"
+        >
+          {{ tag }}
+        </button>
+      }
+    </div>
+  </section>
+
+  <section class="articles-grid">
+    @for (article of pagedArticles(); track article.id; let featured = $first) {
+      <article
+        class="article-card"
+        [class.featured]="featured"
+        [style.view-transition-name]="'card-' + article.slug"
+      >
+        <a [href]="'/article/' + article.slug" class="card-link">
+          @if (article.coverImage) {
+            <div class="card-cover">
+              <img
+                [ngSrc]="article.coverImage"
+                [alt]="article.title"
+                fill
+                [priority]="featured"
+              />
+            </div>
+          }
+          <div class="card-content">
+            <div class="card-meta">
+              @for (tag of article.tags; track tag) {
+                <span class="label">{{ tag }}</span>
+              }
+            </div>
+            <h3
+              class="card-title"
+              [style.view-transition-name]="'article-' + article.slug"
+            >
+              {{ article.title }}
+            </h3>
+            <p class="card-excerpt">{{ article.excerpt }}</p>
+            <div class="card-footer">
+              <span class="card-readtime">{{ article.readTime }} read</span>
+              <span class="card-date">{{
+                article.publishedAt | date: "mediumDate"
+              }}</span>
+            </div>
+          </div>
+        </a>
+      </article>
+    } @empty {
+      <p class="no-results">No articles found.</p>
+    }
+  </section>
+
+  @if (hasMore()) {
+    <div class="load-more">
+      <button class="btn btn--ghost" (click)="loadMore()">
+        Load More Articles
+      </button>
+    </div>
+  }
+</main>

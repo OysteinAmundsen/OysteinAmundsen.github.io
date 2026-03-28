@@ -1,0 +1,35 @@
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <span class="material-icons">terminal</span>
+      <span class="logo-text">OysteinAmundsen</span>
+    </a>
+    <nav class="nav">
+      @if (showAdmin) {
+      <a href="/" class="nav-link">Articles</a>
+      <a routerLink="/admin" class="nav-link admin-link">Admin</a>
+      }
+      <button
+        class="theme-toggle"
+        (click)="toggleTheme()"
+        [title]="'Theme: ' + theme()"
+      >
+        <span class="material-icons">{{ themeIcon() }}</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<router-outlet />
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span class="footer-brand">
+      <span class="material-icons">terminal</span>
+      Synthetic Editorial
+    </span>
+    <span class="footer-copy"
+      >&copy; {{ year }} Synthetic Editorial // Built for Precision</span
+    >
+  </div>
+</footer>

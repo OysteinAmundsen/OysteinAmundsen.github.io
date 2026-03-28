@@ -1,0 +1,353 @@
+.admin-articles {
+  max-width: 1100px;
+}
+
+// ── Breadcrumb ────────────────────────────────────────────
+.breadcrumb {
+  display: block;
+  font-family: var(--font-label);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: var(--spacing-4);
+}
+
+// ── Header ────────────────────────────────────────────────
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-16);
+  gap: var(--spacing-16);
+
+  h2 {
+    margin-bottom: var(--spacing-4);
+  }
+}
+
+.page-subtitle {
+  font-size: 0.9375rem;
+  color: var(--on-surface-variant);
+  max-width: 560px;
+  line-height: 1.5;
+}
+
+// ── Search Bar ────────────────────────────────────────────
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  margin-bottom: var(--spacing-12);
+}
+
+.search-input {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-6);
+  background: var(--surface-container-lowest);
+  border-radius: var(--rounded-md);
+  padding: var(--spacing-6) var(--spacing-8);
+  border-bottom: 1px solid var(--ghost-border);
+
+  .material-icons {
+    font-size: 1.25em;
+    color: var(--on-surface-variant);
+  }
+
+  input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--on-surface);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+
+    &::placeholder {
+      color: var(--on-surface-variant);
+      font-family: var(--font-label);
+      font-size: 0.8125rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.search-actions {
+  display: flex;
+  gap: var(--spacing-4);
+}
+
+.search-status,
+.search-refine {
+  font-family: var(--font-label);
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+// ── Grid Container ────────────────────────────────────────
+.grid-container {
+  background: var(--surface-container-low);
+  border-radius: var(--rounded-lg);
+  padding-top: 0;
+}
+
+// ── Grid Theming ──────────────────────────────────────────
+tbw-grid {
+  display: block;
+  height: 420px;
+  font-size: 0.875em;
+  color-scheme: dark;
+
+  // Core
+  --tbw-color-bg: transparent;
+  --tbw-color-panel-bg: var(--surface-container);
+  --tbw-color-fg: var(--on-surface);
+  --tbw-color-fg-muted: var(--on-surface-variant);
+  --tbw-color-accent: var(--primary);
+  --tbw-color-accent-fg: var(--on-primary);
+  --tbw-color-shadow: rgba(0, 0, 0, 0.4);
+
+  // Header
+  --tbw-color-header-bg: transparent;
+  --tbw-color-header-fg: var(--on-surface-variant);
+  --tbw-color-header-separator: var(--ghost-border);
+  --tbw-header-text-transform: uppercase;
+  --tbw-header-letter-spacing: 0.06em;
+  --tbw-font-size-header: 0.75em;
+  --tbw-font-weight-header: 500;
+  --tbw-header-height: 3em;
+
+  // Rows
+  --tbw-color-row-hover: var(--surface-container);
+  --tbw-color-row-alt: transparent;
+  --tbw-color-selection: var(--selection-bg);
+  --tbw-color-active-row-bg: var(--selection-bg);
+  --tbw-row-height: 3.75em;
+
+  // Borders — Ghost Border approach per design system
+  --tbw-color-border: var(--ghost-border);
+  --tbw-color-border-cell: transparent;
+  --tbw-color-border-header: var(--ghost-border);
+  --tbw-border-header: 1px solid var(--ghost-border);
+  --tbw-row-divider: 1px solid var(--outline-variant);
+  --tbw-border-radius: 0;
+  --tbw-row-hover-outline: 0;
+
+  // Typography
+  --tbw-font-family: var(--font-body);
+
+  // Spacing
+  --tbw-cell-padding: 0.5em 0.75em;
+
+  // Focus
+  --tbw-focus-outline: 2px solid var(--primary);
+  --tbw-range-border-color: var(--primary);
+  --tbw-range-selection-bg: var(--primary);
+
+  // Sorting — hidden until header hover
+  --tbw-sort-indicator-color: var(--outline);
+  --tbw-sort-indicator-active-color: var(--primary);
+  --tbw-sort-indicator-visibility: hidden;
+
+  // Filtering — hidden until header hover
+  --tbw-filter-btn-visibility: hidden;
+
+  // Scrollbar
+  --tbw-scrollbar-thumb: var(--outline-variant);
+  --tbw-scrollbar-track: transparent;
+
+  // Filtering panel
+  --tbw-filter-panel-bg: var(--surface-container);
+  --tbw-filter-panel-fg: var(--on-surface);
+  --tbw-filter-panel-border: var(--ghost-border);
+  --tbw-filter-accent: var(--primary);
+  --tbw-filter-accent-fg: var(--on-primary);
+  --tbw-filter-hover: var(--surface-container-high);
+  --tbw-filter-muted: var(--on-surface-variant);
+  --tbw-filter-divider: var(--ghost-border);
+  --tbw-filter-input-bg: var(--surface-container-lowest);
+  --tbw-filter-input-border: var(--ghost-border);
+
+  // Pinned rows (info bar)
+  --tbw-pinned-rows-bg: transparent;
+  --tbw-pinned-rows-border: var(--ghost-border);
+  --tbw-pinned-rows-color: var(--on-surface-variant);
+
+  // Animation
+  --tbw-row-change-color: var(--primary);
+
+  overflow: hidden;
+}
+
+// Show sort/filter icons on header cell hover
+:host ::ng-deep .data-grid-header-cell:hover {
+  --tbw-sort-indicator-visibility: visible;
+  --tbw-filter-btn-visibility: visible;
+}
+
+// Always show active sort indicators
+:host ::ng-deep .data-grid-header-cell[aria-sort] {
+  --tbw-sort-indicator-visibility: visible;
+}
+
+// ── Cell renderers (light DOM) ────────────────────────────
+:host ::ng-deep .cell-article-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+}
+
+:host ::ng-deep .cell-article-thumb {
+  width: 2.25em;
+  height: 2.25em;
+  border-radius: var(--rounded-md);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+:host ::ng-deep .cell-article-thumb-placeholder {
+  width: 2.25em;
+  height: 2.25em;
+  border-radius: var(--rounded-md);
+  flex-shrink: 0;
+  background: var(--surface-container-highest);
+  background-image: linear-gradient(
+    135deg,
+    var(--surface-container-highest) 0%,
+    var(--surface-variant) 100%
+  );
+}
+
+:host ::ng-deep .cell-article-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125em;
+  min-width: 0;
+}
+
+:host ::ng-deep .cell-title-text {
+  font-weight: 500;
+  color: var(--on-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:host ::ng-deep .cell-article-id {
+  font-family: var(--font-label);
+  font-size: 0.75em;
+  color: var(--on-surface-variant);
+  letter-spacing: 0.02em;
+}
+
+:host ::ng-deep .status-badge {
+  font-family: var(--font-label);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: var(--rounded-sm);
+}
+
+:host ::ng-deep .status-published {
+  background: rgba(47, 248, 1, 0.15);
+  color: var(--secondary);
+}
+
+:host ::ng-deep .status-draft {
+  background: rgba(101, 175, 255, 0.12);
+  color: var(--tertiary);
+}
+
+:host ::ng-deep .status-archived {
+  background: rgba(168, 171, 179, 0.12);
+  color: var(--on-surface-variant);
+}
+
+// ── Operations column ─────────────────────────────────────
+:host ::ng-deep .cell-operations {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+}
+
+:host ::ng-deep .op-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2em;
+  height: 2em;
+  border: none;
+  border-radius: var(--rounded-md);
+  background: transparent;
+  color: var(--on-surface-variant);
+  cursor: pointer;
+  transition: all 120ms ease-out;
+
+  .material-icons {
+    font-size: 1.125em;
+  }
+
+  &:hover {
+    background: var(--surface-container-high);
+    color: var(--on-surface);
+  }
+}
+
+:host ::ng-deep .op-btn--danger:hover {
+  background: rgba(255, 113, 108, 0.12);
+  color: var(--error);
+}
+
+// ── Stats Dashboard ───────────────────────────────────────
+.stats-dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-8);
+  margin-top: var(--spacing-16);
+}
+
+.stat-card {
+  background: var(--surface-container);
+  border-radius: var(--rounded-lg);
+  padding: var(--spacing-12);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+
+  .label {
+    order: -1;
+  }
+}
+
+.stat-value {
+  font-family: var(--font-headline);
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--on-surface);
+  line-height: 1;
+}
+
+.stat-icon {
+  color: var(--primary);
+  font-size: 1.5rem;
+}
+
+.stat-icon--green {
+  color: var(--secondary);
+}
+
+.stat-icon--tertiary {
+  color: var(--tertiary);
+}
+
+.stat-icon--archived {
+  color: var(--outline);
+}

@@ -1,0 +1,26 @@
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <nav class="sidebar-nav">
+      <a
+        routerLink="/admin"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-item"
+      >
+        <span class="material-icons">description</span>
+        All Articles
+      </a>
+      <a routerLink="/admin/new" routerLinkActive="active" class="nav-item">
+        <span class="material-icons">edit_note</span>
+        New Post
+      </a>
+      <a routerLink="/" class="nav-item">
+        <span class="material-icons">visibility</span>
+        View Site
+      </a>
+    </nav>
+  </aside>
+  <main class="admin-content">
+    <router-outlet />
+  </main>
+</div>

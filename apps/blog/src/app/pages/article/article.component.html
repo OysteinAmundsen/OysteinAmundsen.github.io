@@ -1,0 +1,51 @@
+@let art = article();
+@if (art) {
+  <main class="article-page" [style.view-transition-name]="'card-' + art.slug">
+    <div
+      class="article-hero"
+      [class.has-cover]="art.coverImage"
+      [style.background-image]="
+        art.coverImage ? 'url(' + art.coverImage + ')' : null
+      "
+    >
+      <a href="/" class="back-link">
+        <span class="material-icons">arrow_back</span>
+        Back to Feed
+      </a>
+
+      <div class="article-meta-bar">
+        @for (tag of art.tags; track tag) {
+          <span class="chip">{{ tag }}</span>
+        }
+        <span class="label">Read Time: {{ art.readTime }}</span>
+      </div>
+
+      <h1
+        class="article-title"
+        [style.view-transition-name]="'article-' + art.slug"
+      >
+        {{ art.title }}
+      </h1>
+
+      <div class="author-info">
+        <div class="author-details">
+          <span class="author-name">{{ art.author }}</span>
+          <span class="publish-date label">
+            Published // {{ art.publishedAt | date: "dd.MMM.yyyy" | uppercase }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <article
+      class="article-body prose"
+      [innerHTML]="renderedContent()"
+    ></article>
+
+    <div class="article-tags-footer">
+      @for (tag of art.tags; track tag) {
+        <span class="chip">#{{ tag }}</span>
+      }
+    </div>
+  </main>
+}
