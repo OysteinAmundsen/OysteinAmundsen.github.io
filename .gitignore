@@ -19,6 +19,9 @@ Thumbs.db
 .nx/cache
 .nx/workspace-data
 
+# Angular
+.angular/
+
 # Secrets
 .vscode/mcp.json
 
