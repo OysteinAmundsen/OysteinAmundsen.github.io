@@ -26,13 +26,60 @@
     --crepe-font-title: var(--font-headline);
     --crepe-font-default: var(--font-body);
     --crepe-font-code: var(--font-code, "Space Mono", monospace);
-    --crepe-color-inline-code: inherit;
+    --crepe-color-inline-code: var(--code-inline);
   }
 
   // Fix toolbar icon visibility (Crepe uses --crepe-color-outline for SVG fill)
   .milkdown-toolbar .toolbar-item svg {
     color: var(--on-surface-variant);
     fill: var(--on-surface-variant);
+  }
+
+  // Fix list rendering to match article .prose styles
+  .milkdown-list-item-block li {
+    gap: 0;
+
+    .label-wrapper {
+      width: auto;
+      height: auto;
+      flex-shrink: 0;
+      align-self: baseline;
+
+      // Hide default SVG bullet, replace with CSS dot
+      .label.bullet {
+        width: auto;
+        height: auto;
+        padding: 0;
+
+        svg {
+          display: none;
+        }
+
+        &::after {
+          content: "\2022"; // bullet character •
+          color: var(--on-surface-variant);
+          font-size: 1.2em;
+          line-height: 1.85; // match prose text line-height
+          margin-right: 6px;
+        }
+      }
+
+      // Ordered list numbers
+      .label.ordered {
+        font-size: 1em;
+        line-height: inherit;
+        width: auto;
+        min-width: 0;
+        height: auto;
+        padding: 0;
+        margin-right: 4px;
+        color: var(--on-surface-variant);
+      }
+    }
+
+    .content-dom p {
+      margin-bottom: 0;
+    }
   }
 
   // ── Prose-parity styling (matches .prose from _prose.scss) ──

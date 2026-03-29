@@ -6,6 +6,7 @@ import {
   input,
   OnDestroy,
   output,
+  signal,
   viewChild,
   ViewEncapsulation,
 } from "@angular/core";
@@ -81,7 +82,8 @@ export class MilkdownEditorComponent implements OnDestroy {
     viewChild.required<ElementRef<HTMLElement>>("editorHost");
 
   private crepe: Crepe | null = null;
-  private skipNextSync = false;
+  private readonly crepeReady = signal(false);
+  private lastSyncedValue = "";
 
   constructor() {
     afterNextRender(() => this.initEditor());
@@ -89,10 +91,11 @@ export class MilkdownEditorComponent implements OnDestroy {
     // Sync external value changes into the editor
     effect(() => {
       const val = this.value();
-      if (this.crepe && !this.skipNextSync) {
+      const ready = this.crepeReady();
+      if (this.crepe && ready && val !== this.lastSyncedValue) {
+        this.lastSyncedValue = val;
         this.crepe.editor.action(replaceAll(val));
       }
-      this.skipNextSync = false;
     });
   }
 
@@ -111,12 +114,14 @@ export class MilkdownEditorComponent implements OnDestroy {
 
     this.crepe.on((listener) => {
       listener.markdownUpdated((_ctx, markdown) => {
-        this.skipNextSync = true;
+        this.lastSyncedValue = markdown;
         this.valueChange.emit(markdown);
       });
     });
 
     await this.crepe.create();
+    this.lastSyncedValue = this.value();
+    this.crepeReady.set(true);
   }
 
   ngOnDestroy() {
