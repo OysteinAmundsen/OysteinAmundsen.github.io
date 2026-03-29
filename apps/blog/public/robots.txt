@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://oysteinamundsen.github.io/sitemap-index.xml

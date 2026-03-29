@@ -1,11 +1,11 @@
-import { Component, computed, inject, signal } from "@angular/core";
+import { Component, computed, effect, inject, signal } from "@angular/core";
 import { Router } from "@angular/router";
-import { Article, ArticleService } from "@blog/shared";
-import type { ColumnConfig, GridConfig } from "@toolbox-web/grid";
+import { Article, ArticleService, ArticleStatus } from "@blog/shared";
+import type { ColumnConfig, GridConfig } from "@toolbox-web/grid-angular";
 import { Grid } from "@toolbox-web/grid-angular";
 import "@toolbox-web/grid-angular/features/filtering";
+import { injectGridFiltering } from "@toolbox-web/grid-angular/features/filtering";
 import "@toolbox-web/grid-angular/features/pinned-rows";
-import "@toolbox-web/grid-angular/features/selection";
 
 @Component({
   selector: "app-admin-articles",
@@ -16,16 +16,35 @@ import "@toolbox-web/grid-angular/features/selection";
 export class AdminArticlesComponent {
   private articleService = inject(ArticleService);
   private router = inject(Router);
-  readonly articles = signal<Article[]>([]);
-  readonly totalCount = computed(() => this.articles().length);
+  private filtering = injectGridFiltering();
+
+  private allArticles = signal<Article[]>([]);
+  readonly statusFilter = signal<ArticleStatus | "all">("all");
+  readonly searchQuery = signal("");
+
+  readonly articles = computed(() => {
+    let results = this.allArticles();
+    const query = this.searchQuery().toLowerCase();
+    if (query) {
+      results = results.filter(
+        (a) =>
+          a.title.toLowerCase().includes(query) ||
+          a.id.toLowerCase().includes(query) ||
+          a.author.toLowerCase().includes(query),
+      );
+    }
+    return results;
+  });
+
+  readonly totalCount = computed(() => this.allArticles().length);
   readonly publishedCount = computed(
-    () => this.articles().filter((a) => a.status === "published").length,
+    () => this.allArticles().filter((a) => a.status === "published").length,
   );
   readonly draftCount = computed(
-    () => this.articles().filter((a) => a.status === "draft").length,
+    () => this.allArticles().filter((a) => a.status === "draft").length,
   );
   readonly archivedCount = computed(
-    () => this.articles().filter((a) => a.status === "archived").length,
+    () => this.allArticles().filter((a) => a.status === "archived").length,
   );
 
   columns: ColumnConfig<Article>[] = [
@@ -143,8 +162,11 @@ export class AdminArticlesComponent {
 
   gridConfig: GridConfig<Article> = {
     columns: this.columns,
+    icons: {
+      filter: '<span class="material-symbols-outlined">filter_alt</span>',
+      filterActive: '<span class="material-symbols-outlined">filter_alt</span>',
+    },
     features: {
-      selection: "row",
       filtering: true,
       pinnedRows: {
         showRowCount: true,
@@ -155,11 +177,26 @@ export class AdminArticlesComponent {
 
   constructor() {
     this.loadArticles();
+
+    effect(() => {
+      const status = this.statusFilter();
+      if (!this.filtering.isReady()) return;
+
+      if (status === "all") {
+        this.filtering.clearFieldFilter("status");
+      } else {
+        this.filtering.setFilter("status", {
+          type: "text",
+          operator: "equals",
+          value: status,
+        });
+      }
+    });
   }
 
   loadArticles() {
     this.articleService.getAllArticles().subscribe((articles) => {
-      this.articles.set(articles);
+      this.allArticles.set(articles);
     });
   }
 
@@ -180,20 +217,23 @@ export class AdminArticlesComponent {
   }
 
   onSearch(event: Event) {
-    const query = (event.target as HTMLInputElement).value.toLowerCase();
-    if (!query) {
-      this.loadArticles();
-      return;
-    }
-    this.articleService.getAllArticles().subscribe((articles) => {
-      this.articles.set(
-        articles.filter(
-          (a) =>
-            a.title.toLowerCase().includes(query) ||
-            a.id.toLowerCase().includes(query) ||
-            a.author.toLowerCase().includes(query),
-        ),
-      );
-    });
+    this.searchQuery.set((event.target as HTMLInputElement).value);
   }
+
+  cycleStatusFilter() {
+    const order: (ArticleStatus | "all")[] = [
+      "all",
+      "published",
+      "draft",
+      "archived",
+    ];
+    const current = this.statusFilter();
+    const next = order[(order.indexOf(current) + 1) % order.length];
+    this.statusFilter.set(next);
+  }
+
+  readonly statusFilterLabel = computed(() => {
+    const s = this.statusFilter();
+    return s === "all" ? "All" : s.charAt(0).toUpperCase() + s.slice(1);
+  });
 }

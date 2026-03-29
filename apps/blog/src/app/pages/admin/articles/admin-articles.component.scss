@@ -97,103 +97,12 @@
   padding-top: 0;
 }
 
-// ── Grid Theming ──────────────────────────────────────────
+// ── Grid Instance ─────────────────────────────────────────
 tbw-grid {
   display: block;
   height: 420px;
   font-size: 0.875em;
-  color-scheme: dark;
-
-  // Core
-  --tbw-color-bg: transparent;
-  --tbw-color-panel-bg: var(--surface-container);
-  --tbw-color-fg: var(--on-surface);
-  --tbw-color-fg-muted: var(--on-surface-variant);
-  --tbw-color-accent: var(--primary);
-  --tbw-color-accent-fg: var(--on-primary);
-  --tbw-color-shadow: rgba(0, 0, 0, 0.4);
-
-  // Header
-  --tbw-color-header-bg: transparent;
-  --tbw-color-header-fg: var(--on-surface-variant);
-  --tbw-color-header-separator: var(--ghost-border);
-  --tbw-header-text-transform: uppercase;
-  --tbw-header-letter-spacing: 0.06em;
-  --tbw-font-size-header: 0.75em;
-  --tbw-font-weight-header: 500;
-  --tbw-header-height: 3em;
-
-  // Rows
-  --tbw-color-row-hover: var(--surface-container);
-  --tbw-color-row-alt: transparent;
-  --tbw-color-selection: var(--selection-bg);
-  --tbw-color-active-row-bg: var(--selection-bg);
-  --tbw-row-height: 3.75em;
-
-  // Borders — Ghost Border approach per design system
-  --tbw-color-border: var(--ghost-border);
-  --tbw-color-border-cell: transparent;
-  --tbw-color-border-header: var(--ghost-border);
-  --tbw-border-header: 1px solid var(--ghost-border);
-  --tbw-row-divider: 1px solid var(--outline-variant);
-  --tbw-border-radius: 0;
-  --tbw-row-hover-outline: 0;
-
-  // Typography
-  --tbw-font-family: var(--font-body);
-
-  // Spacing
-  --tbw-cell-padding: 0.5em 0.75em;
-
-  // Focus
-  --tbw-focus-outline: 2px solid var(--primary);
-  --tbw-range-border-color: var(--primary);
-  --tbw-range-selection-bg: var(--primary);
-
-  // Sorting — hidden until header hover
-  --tbw-sort-indicator-color: var(--outline);
-  --tbw-sort-indicator-active-color: var(--primary);
-  --tbw-sort-indicator-visibility: hidden;
-
-  // Filtering — hidden until header hover
-  --tbw-filter-btn-visibility: hidden;
-
-  // Scrollbar
-  --tbw-scrollbar-thumb: var(--outline-variant);
-  --tbw-scrollbar-track: transparent;
-
-  // Filtering panel
-  --tbw-filter-panel-bg: var(--surface-container);
-  --tbw-filter-panel-fg: var(--on-surface);
-  --tbw-filter-panel-border: var(--ghost-border);
-  --tbw-filter-accent: var(--primary);
-  --tbw-filter-accent-fg: var(--on-primary);
-  --tbw-filter-hover: var(--surface-container-high);
-  --tbw-filter-muted: var(--on-surface-variant);
-  --tbw-filter-divider: var(--ghost-border);
-  --tbw-filter-input-bg: var(--surface-container-lowest);
-  --tbw-filter-input-border: var(--ghost-border);
-
-  // Pinned rows (info bar)
-  --tbw-pinned-rows-bg: transparent;
-  --tbw-pinned-rows-border: var(--ghost-border);
-  --tbw-pinned-rows-color: var(--on-surface-variant);
-
-  // Animation
-  --tbw-row-change-color: var(--primary);
-
   overflow: hidden;
-}
-
-// Show sort/filter icons on header cell hover
-:host ::ng-deep .data-grid-header-cell:hover {
-  --tbw-sort-indicator-visibility: visible;
-  --tbw-filter-btn-visibility: visible;
-}
-
-// Always show active sort indicators
-:host ::ng-deep .data-grid-header-cell[aria-sort] {
-  --tbw-sort-indicator-visibility: visible;
 }
 
 // ── Cell renderers (light DOM) ────────────────────────────

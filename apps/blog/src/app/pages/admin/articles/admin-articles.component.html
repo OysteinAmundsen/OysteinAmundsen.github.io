@@ -25,13 +25,12 @@
       />
     </div>
     <div class="search-actions">
-      <button class="btn btn--ghost search-status">
-        Status: All
+      <button
+        class="btn btn--ghost search-status"
+        (click)="cycleStatusFilter()"
+      >
+        Status: {{ statusFilterLabel() }}
         <span class="material-icons">expand_more</span>
-      </button>
-      <button class="btn btn--ghost search-refine">
-        <span class="material-icons">filter_list</span>
-        Refine
       </button>
     </div>
   </div>

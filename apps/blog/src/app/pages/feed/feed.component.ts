@@ -1,6 +1,6 @@
 import { DatePipe, NgOptimizedImage } from "@angular/common";
 import { Component, computed, inject, signal } from "@angular/core";
-import { ArticleIndex, ArticleService } from "@blog/shared";
+import { ArticleIndex, ArticleService, SeoService } from "@blog/shared";
 
 const PAGE_SIZE = 12;
 
@@ -12,6 +12,7 @@ const PAGE_SIZE = 12;
 })
 export class FeedComponent {
   private articleService = inject(ArticleService);
+  private seoService = inject(SeoService);
 
   readonly articles = signal<ArticleIndex[]>([]);
   readonly activeTag = signal("");
@@ -52,6 +53,8 @@ export class FeedComponent {
   );
 
   constructor() {
+    this.seoService.setPageMeta({ url: "/" });
+
     this.articleService.getPublishedIndex().subscribe((articles) => {
       this.articles.set(
         articles.sort(

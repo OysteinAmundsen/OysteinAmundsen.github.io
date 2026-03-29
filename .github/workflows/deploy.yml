@@ -22,11 +22,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
-      - run: npm ci
+      - uses: oven-sh/setup-bun@v2
 
-      - run: npx nx build blog --configuration=production
+      - run: bun install --frozen-lockfile
+
+      - run: bun nx build blog --configuration=production
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -3,15 +3,14 @@ import {
   Component,
   computed,
   effect,
-  ElementRef,
   inject,
   input,
   signal,
-  viewChild,
 } from "@angular/core";
 import { form, FormField } from "@angular/forms/signals";
 import { Router } from "@angular/router";
-import { Article, ArticleService, ArticleStatus, marked } from "@blog/shared";
+import { Article, ArticleService, ArticleStatus } from "@blog/shared";
+import { MilkdownEditorComponent } from "./milkdown-editor.component";
 
 const WORDS_PER_MINUTE = 200;
 const EXCERPT_MAX_LENGTH = 200;
@@ -28,7 +27,7 @@ interface ArticleFormModel {
 
 @Component({
   selector: "app-admin-editor",
-  imports: [FormField, NgOptimizedImage],
+  imports: [FormField, NgOptimizedImage, MilkdownEditorComponent],
   templateUrl: "./admin-editor.component.html",
   styleUrl: "./admin-editor.component.scss",
 })
@@ -38,9 +37,6 @@ export class AdminEditorComponent {
 
   readonly id = input<string>();
   readonly isNew = computed(() => !this.id());
-  readonly previewMode = signal(false);
-  readonly contentEditor =
-    viewChild<ElementRef<HTMLTextAreaElement>>("contentEditor");
 
   readonly formModel = signal<ArticleFormModel>({
     title: "",
@@ -54,9 +50,6 @@ export class AdminEditorComponent {
 
   readonly articleForm = form(this.formModel);
   readonly tags = signal<string[]>([]);
-  readonly renderedContent = computed(
-    () => marked.parse(this.formModel().content) as string,
-  );
 
   // Auto-calculated read time
   readonly readTime = computed(() => {
@@ -147,71 +140,8 @@ export class AdminEditorComponent {
     });
   }
 
-  // Toolbar formatting
-  insertFormat(prefix: string, suffix: string = prefix) {
-    const el = this.contentEditor()?.nativeElement;
-    if (!el) return;
-    const start = el.selectionStart;
-    const end = el.selectionEnd;
-    const text = el.value;
-    const selected = text.substring(start, end);
-    const replacement = `${prefix}${selected || "text"}${suffix}`;
-    el.setRangeText(replacement, start, end, "select");
-    el.focus();
-    el.dispatchEvent(new Event("input", { bubbles: true }));
-  }
-
-  formatBold() {
-    this.insertFormat("**");
-  }
-  formatItalic() {
-    this.insertFormat("*");
-  }
-  formatLink() {
-    const el = this.contentEditor()?.nativeElement;
-    if (!el) return;
-    const selected = el.value.substring(el.selectionStart, el.selectionEnd);
-    const replacement = `[${selected || "text"}](url)`;
-    el.setRangeText(replacement, el.selectionStart, el.selectionEnd, "select");
-    el.focus();
-    el.dispatchEvent(new Event("input", { bubbles: true }));
-  }
-  formatImage() {
-    const el = this.contentEditor()?.nativeElement;
-    if (!el) return;
-    const replacement = `![alt](image-url)`;
-    el.setRangeText(replacement, el.selectionStart, el.selectionEnd, "select");
-    el.focus();
-    el.dispatchEvent(new Event("input", { bubbles: true }));
-  }
-  formatCode() {
-    this.insertFormat("`");
-  }
-  formatList() {
-    const el = this.contentEditor()?.nativeElement;
-    if (!el) return;
-    const start = el.selectionStart;
-    const end = el.selectionEnd;
-    const selected = el.value.substring(start, end);
-    const lines = selected
-      ? selected.split("\n").map((l) => `- ${l}`)
-      : ["- item"];
-    el.setRangeText(lines.join("\n"), start, end, "select");
-    el.focus();
-    el.dispatchEvent(new Event("input", { bubbles: true }));
-  }
-  formatQuote() {
-    const el = this.contentEditor()?.nativeElement;
-    if (!el) return;
-    const start = el.selectionStart;
-    const end = el.selectionEnd;
-    const selected = el.value.substring(start, end);
-    const lines = selected
-      ? selected.split("\n").map((l) => `> ${l}`)
-      : ["> quote"];
-    el.setRangeText(lines.join("\n"), start, end, "select");
-    el.focus();
-    el.dispatchEvent(new Event("input", { bubbles: true }));
+  onContentChange(markdown: string) {
+    this.articleForm.content().value.set(markdown);
   }
 
   // Excerpt override management

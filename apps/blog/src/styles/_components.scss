@@ -1,0 +1,81 @@
+// ============================================================
+// Components — Buttons, chips, labels, icons
+// ============================================================
+
+// Labels & Metadata
+.label {
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--on-surface-variant);
+}
+
+// Chips / Tags
+.chip {
+  display: inline-block;
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: var(--spacing-2) var(--spacing-6);
+  border-radius: var(--rounded-sm);
+  background: var(--tertiary-container);
+  color: var(--on-tertiary-container);
+  letter-spacing: 0.03em;
+}
+
+// Buttons
+.btn {
+  font-family: var(--font-headline);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: var(--spacing-6) var(--spacing-12);
+  border-radius: var(--rounded-md);
+  border: none;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-4);
+
+  &--primary {
+    background: var(--primary);
+    color: var(--on-primary);
+
+    &:hover {
+      background: var(--primary-dim);
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: var(--primary);
+    outline: 1px solid var(--ghost-border);
+
+    &:hover {
+      background: var(--surface-container-high);
+    }
+  }
+
+  &--tertiary {
+    background: transparent;
+    color: var(--on-surface-variant);
+    font-family: var(--font-label);
+
+    &:hover {
+      color: var(--on-surface);
+    }
+  }
+
+  &--full {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+// Material Icons helper
+.material-icons {
+  font-size: 1.25em;
+  vertical-align: middle;
+}

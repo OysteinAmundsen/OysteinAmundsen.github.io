@@ -1,206 +1,153 @@
 <div class="editor-page">
   <div class="editor-header">
     <h2>{{ isNew() ? "New Article" : "Edit Article" }}</h2>
-    <div class="header-actions">
-      <button class="btn btn--tertiary" (click)="cancel()">Cancel</button>
-      <button class="btn btn--ghost" (click)="save()">Save Draft</button>
-      <button class="btn btn--primary" (click)="publish()">
-        <span class="material-icons">publish</span>
-        Publish Live
-      </button>
-    </div>
   </div>
 
-  <div class="editor-body">
-    <div class="editor-main">
-      <!-- Title -->
-      <div class="field">
-        <input
-          type="text"
-          class="title-input"
-          [formField]="articleForm.title"
-          placeholder="Article title..."
-        />
-      </div>
+  <div class="editor-main">
+    <!-- Title -->
+    <div class="field">
+      <input
+        type="text"
+        class="title-input"
+        [formField]="articleForm.title"
+        placeholder="Article title..."
+      />
+    </div>
 
-      <!-- Slug -->
-      <div class="field slug-field">
-        <span class="slug-prefix label">/article/</span>
-        <span class="slug-value">{{ autoSlug() }}</span>
-      </div>
+    <!-- Slug -->
+    <div class="field slug-field">
+      <span class="slug-prefix label">/article/</span>
+      <span class="slug-value">{{ autoSlug() }}</span>
+    </div>
 
-      <!-- Toolbar -->
-      <div class="editor-toolbar">
-        @if (!previewMode()) {
-          <button class="toolbar-btn" title="Bold" (click)="formatBold()">
-            <span class="material-icons">format_bold</span>
-          </button>
-          <button class="toolbar-btn" title="Italic" (click)="formatItalic()">
-            <span class="material-icons">format_italic</span>
-          </button>
-          <button class="toolbar-btn" title="Link" (click)="formatLink()">
-            <span class="material-icons">link</span>
-          </button>
-          <button class="toolbar-btn" title="Image" (click)="formatImage()">
-            <span class="material-icons">image</span>
-          </button>
-          <button class="toolbar-btn" title="Code" (click)="formatCode()">
-            <span class="material-icons">code</span>
-          </button>
-          <button class="toolbar-btn" title="List" (click)="formatList()">
-            <span class="material-icons">format_list_bulleted</span>
-          </button>
-          <button class="toolbar-btn" title="Quote" (click)="formatQuote()">
-            <span class="material-icons">format_quote</span>
-          </button>
-        }
-        <div class="toolbar-spacer"></div>
-        <button
-          class="toolbar-btn"
-          [class.active]="previewMode()"
-          (click)="previewMode.set(!previewMode())"
-          title="Toggle Preview"
-        >
-          <span class="material-icons">{{
-            previewMode() ? "edit" : "visibility"
-          }}</span>
-          {{ previewMode() ? "Edit" : "Preview" }}
-        </button>
-      </div>
+    <!-- WYSIWYG Markdown Editor -->
+    <app-milkdown-editor
+      [value]="formModel().content"
+      (valueChange)="onContentChange($event)"
+    />
+  </div>
 
-      <!-- Editor / Preview -->
-      @if (!previewMode()) {
-        <textarea
-          class="content-editor"
-          [formField]="articleForm.content"
-          placeholder="Write your article in Markdown..."
-          rows="24"
-          #contentEditor
-        ></textarea>
+  <!-- Sidebar metadata -->
+  <div class="editor-sidebar">
+    <div class="sidebar-actions">
+      <button class="btn btn--tertiary" (click)="cancel()" title="Cancel">
+        <span class="material-icons">close</span>
+      </button>
+      <button class="btn btn--ghost" (click)="save()" title="Save Draft">
+        <span class="material-icons">save</span>
+      </button>
+      <button class="btn btn--primary" (click)="publish()" title="Publish Live">
+        <span class="material-icons">publish</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <h4 class="sidebar-label">Cover Image</h4>
+      @if (formModel().coverImage) {
+        <div class="cover-preview">
+          <img [ngSrc]="formModel().coverImage" alt="Cover preview" fill />
+          <button
+            class="cover-remove"
+            (click)="removeCoverImage()"
+            title="Remove image"
+          >
+            <span class="material-icons">close</span>
+          </button>
+        </div>
       } @else {
-        <div
-          class="content-preview prose"
-          [innerHTML]="renderedContent()"
-        ></div>
+        <label class="cover-upload">
+          <span class="material-icons">cloud_upload</span>
+          <span>Choose image…</span>
+          <input
+            type="file"
+            accept="image/*"
+            hidden
+            (change)="onImageSelected($event)"
+          />
+        </label>
+      }
+      @if (uploading()) {
+        <div class="cover-uploading">Uploading…</div>
       }
     </div>
 
-    <!-- Sidebar metadata -->
-    <div class="editor-sidebar">
-      <div class="sidebar-section">
-        <h4 class="sidebar-label">Cover Image</h4>
-        @if (formModel().coverImage) {
-          <div class="cover-preview">
-            <img [ngSrc]="formModel().coverImage" alt="Cover preview" fill />
-            <button
-              class="cover-remove"
-              (click)="removeCoverImage()"
-              title="Remove image"
-            >
-              <span class="material-icons">close</span>
+    <div class="sidebar-section">
+      <div class="sidebar-label-row">
+        <h4 class="sidebar-label">Excerpt</h4>
+        <button
+          class="btn-inline"
+          (click)="generateExcerpt()"
+          [disabled]="generatingExcerpt()"
+          title="Generate with AI"
+        >
+          <span class="material-icons">{{
+            generatingExcerpt() ? "hourglass_empty" : "auto_awesome"
+          }}</span>
+        </button>
+      </div>
+      <textarea
+        class="field-textarea"
+        [formField]="articleForm.excerpt"
+        (input)="onExcerptInput()"
+        placeholder="Auto-generated from content…"
+        rows="8"
+      ></textarea>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label-row">
+        <h4 class="sidebar-label">Tags</h4>
+        <button
+          class="btn-inline"
+          (click)="suggestTags()"
+          [disabled]="suggestingTags()"
+          title="Suggest tags from content"
+        >
+          <span class="material-icons">{{
+            suggestingTags() ? "hourglass_empty" : "auto_awesome"
+          }}</span>
+        </button>
+      </div>
+      <div class="tags-list">
+        @for (tag of tags(); track tag) {
+          <span class="tag-chip">
+            {{ tag }}
+            <button class="tag-remove" (click)="removeTag(tag)">&times;</button>
+          </span>
+        }
+      </div>
+      @if (suggestedTags().length) {
+        <div class="suggested-tags">
+          <span class="suggested-label">Suggested:</span>
+          @for (tag of suggestedTags(); track tag) {
+            <button class="tag-suggestion" (click)="addSuggestedTag(tag)">
+              + {{ tag }}
             </button>
-          </div>
-        } @else {
-          <label class="cover-upload">
-            <span class="material-icons">cloud_upload</span>
-            <span>Choose image…</span>
-            <input
-              type="file"
-              accept="image/*"
-              hidden
-              (change)="onImageSelected($event)"
-            />
-          </label>
-        }
-        @if (uploading()) {
-          <div class="cover-uploading">Uploading…</div>
-        }
-      </div>
-
-      <div class="sidebar-section">
-        <div class="sidebar-label-row">
-          <h4 class="sidebar-label">Excerpt</h4>
-          <button
-            class="btn-inline"
-            (click)="generateExcerpt()"
-            [disabled]="generatingExcerpt()"
-            title="Generate with AI"
-          >
-            <span class="material-icons">{{
-              generatingExcerpt() ? "hourglass_empty" : "auto_awesome"
-            }}</span>
-          </button>
-        </div>
-        <textarea
-          class="field-textarea"
-          [formField]="articleForm.excerpt"
-          (input)="onExcerptInput()"
-          placeholder="Auto-generated from content…"
-          rows="4"
-        ></textarea>
-      </div>
-
-      <div class="sidebar-section">
-        <div class="sidebar-label-row">
-          <h4 class="sidebar-label">Tags</h4>
-          <button
-            class="btn-inline"
-            (click)="suggestTags()"
-            [disabled]="suggestingTags()"
-            title="Suggest tags from content"
-          >
-            <span class="material-icons">{{
-              suggestingTags() ? "hourglass_empty" : "auto_awesome"
-            }}</span>
-          </button>
-        </div>
-        <div class="tags-list">
-          @for (tag of tags(); track tag) {
-            <span class="tag-chip">
-              {{ tag }}
-              <button class="tag-remove" (click)="removeTag(tag)">
-                &times;
-              </button>
-            </span>
           }
         </div>
-        @if (suggestedTags().length) {
-          <div class="suggested-tags">
-            <span class="suggested-label">Suggested:</span>
-            @for (tag of suggestedTags(); track tag) {
-              <button class="tag-suggestion" (click)="addSuggestedTag(tag)">
-                + {{ tag }}
-              </button>
-            }
-          </div>
-        }
-        <div class="tag-input-wrap">
-          <input
-            type="text"
-            class="field-input"
-            #tagInputEl
-            (keydown.enter)="addTag(tagInputEl)"
-            placeholder="Add tag..."
-          />
-          <button class="btn btn--ghost btn--sm" (click)="addTag(tagInputEl)">
-            Add
-          </button>
-        </div>
-      </div>
-
-      <div class="sidebar-section">
-        <h4 class="sidebar-label">Read Time</h4>
-        <span class="read-time-display">{{ readTime() }}</span>
-      </div>
-
-      <div class="sidebar-section">
-        <h4 class="sidebar-label">Author</h4>
+      }
+      <div class="tag-input-wrap">
         <input
           type="text"
           class="field-input"
-          [formField]="articleForm.author"
+          #tagInputEl
+          (keydown.enter)="addTag(tagInputEl)"
+          placeholder="Add tag..."
         />
+        <button class="btn btn--ghost btn--sm" (click)="addTag(tagInputEl)">
+          Add
+        </button>
       </div>
+    </div>
+
+    <div class="sidebar-section">
+      <h4 class="sidebar-label">Read Time</h4>
+      <span class="read-time-display">{{ readTime() }}</span>
+    </div>
+
+    <div class="sidebar-section">
+      <h4 class="sidebar-label">Author</h4>
+      <input type="text" class="field-input" [formField]="articleForm.author" />
     </div>
   </div>
 </div>

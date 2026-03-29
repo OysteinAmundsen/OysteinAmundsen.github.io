@@ -7,7 +7,7 @@ import {
   input,
   signal,
 } from "@angular/core";
-import { Article, ArticleService, marked } from "@blog/shared";
+import { Article, ArticleService, SeoService, marked } from "@blog/shared";
 
 @Component({
   selector: "app-article",
@@ -17,6 +17,7 @@ import { Article, ArticleService, marked } from "@blog/shared";
 })
 export class ArticleComponent {
   private articleService = inject(ArticleService);
+  private seoService = inject(SeoService);
 
   readonly slug = input.required<string>();
   readonly article = signal<Article | null>(null);
@@ -32,6 +33,7 @@ export class ArticleComponent {
         this.articleService.getArticleBySlug(slug).subscribe((article) => {
           if (article) {
             this.article.set(article);
+            this.seoService.setArticleMeta(article);
           }
         });
       }

@@ -1,0 +1,111 @@
+// ============================================================
+// Base — Reset, typography, and core element styles
+// ============================================================
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--surface);
+  color: var(--on-background);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+// Typography
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-headline);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--on-surface);
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+h2 {
+  font-size: 2rem;
+}
+h3 {
+  font-size: 1.5rem;
+}
+h4 {
+  font-size: 1.25rem;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--on-surface-variant);
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 120ms ease-out;
+
+  &:hover {
+    color: var(--primary-dim);
+  }
+}
+
+// Code
+code {
+  font-family: "Space Grotesk", monospace;
+  font-size: 0.875em;
+  background: var(--surface-container-lowest);
+  padding: 0.15em 0.4em;
+  border-radius: var(--rounded-sm);
+  color: var(--secondary);
+}
+
+pre {
+  background: var(--surface-container-lowest);
+  padding: var(--spacing-12);
+  border-radius: var(--rounded-md);
+  overflow-x: auto;
+  margin: var(--spacing-12) 0;
+
+  code {
+    background: none;
+    padding: 0;
+    font-size: 0.875rem;
+    color: var(--on-surface-variant);
+  }
+}
+
+// Scrollbar styling
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--surface-container-low);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--outline-variant);
+  border-radius: 3px;
+}
+
+// Selection
+::selection {
+  background: var(--selection-bg);
+  color: var(--on-surface);
+}
