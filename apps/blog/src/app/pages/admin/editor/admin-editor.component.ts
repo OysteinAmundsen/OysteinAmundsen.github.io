@@ -312,8 +312,8 @@ export class AdminEditorComponent {
   private buildArticle(): Article {
     const formData = this.formModel();
     const orig = this.originalArticle();
-    const isPublishing =
-      formData.status === "published" && !orig?.publishedAt;
+    const isNewlyPublished =
+      formData.status === "published" && orig?.status !== "published";
     return {
       id: orig?.id ?? "",
       ...formData,
@@ -323,7 +323,7 @@ export class AdminEditorComponent {
       tags: this.tags(),
       createdAt: formData.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      publishedAt: isPublishing
+      publishedAt: isNewlyPublished
         ? new Date().toISOString()
         : (orig?.publishedAt ?? null),
     };
