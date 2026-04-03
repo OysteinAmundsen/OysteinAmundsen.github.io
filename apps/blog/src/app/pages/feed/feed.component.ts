@@ -59,8 +59,8 @@ export class FeedComponent {
       this.articles.set(
         articles.sort(
           (a, b) =>
-            new Date(b.publishedAt ?? 0).getTime() -
-            new Date(a.publishedAt ?? 0).getTime(),
+            new Date(b.publishedAt ?? b.createdAt).getTime() -
+            new Date(a.publishedAt ?? a.createdAt).getTime(),
         ),
       );
     });
