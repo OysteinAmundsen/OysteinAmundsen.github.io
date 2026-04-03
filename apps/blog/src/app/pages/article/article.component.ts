@@ -8,10 +8,11 @@ import {
   signal,
 } from "@angular/core";
 import { Article, ArticleService, SeoService, marked } from "@blog/shared";
+import { GiscusComponent } from "./giscus.component";
 
 @Component({
   selector: "app-article",
-  imports: [DatePipe, UpperCasePipe],
+  imports: [DatePipe, UpperCasePipe, GiscusComponent],
   templateUrl: "./article.component.html",
   styleUrl: "./article.component.scss",
 })

@@ -95,12 +95,14 @@
 // Articles Grid
 .articles-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
   gap: var(--spacing-16);
   padding-bottom: var(--spacing-32);
 }
 
 .article-card {
+  container-type: inline-size;
+  container-name: card;
   background: var(--surface-container-low);
   border-radius: var(--rounded-lg);
   transition:
@@ -115,34 +117,37 @@
 
   &.featured {
     grid-column: 1 / -1;
+  }
+}
 
-    .card-link {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto;
-    }
+// Featured card: side-by-side layout only when the card is wide enough
+@container card (min-width: 600px) {
+  .featured .card-link {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
 
-    .card-cover {
-      grid-row: 1 / -1;
-      height: auto;
-      min-height: 260px;
-      border-radius: var(--rounded-md) 0 0 var(--rounded-md);
-    }
+  .featured .card-cover {
+    grid-row: 1 / -1;
+    height: auto;
+    min-height: 260px;
+    border-radius: var(--rounded-md) 0 0 var(--rounded-md);
+  }
 
-    .card-content {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
+  .featured .card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
-    .card-title {
-      font-size: 2rem;
-    }
+  .featured .card-title {
+    font-size: 2rem;
+  }
 
-    .card-excerpt {
-      font-size: 1.0625rem;
-      max-width: 720px;
-    }
+  .featured .card-excerpt {
+    font-size: 1.0625rem;
+    max-width: 720px;
   }
 }
 
@@ -219,4 +224,45 @@
   display: flex;
   justify-content: center;
   padding: var(--spacing-16) 0 var(--spacing-48);
+}
+
+// Responsive — hero & search
+@media (max-width: 640px) {
+  .feed {
+    padding: 0 var(--spacing-8);
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .search-bar {
+    max-width: 100%;
+  }
+
+  .filter-bar {
+    gap: var(--spacing-4);
+  }
+
+  .filter-chip {
+    font-size: 0.6875rem;
+    padding: var(--spacing-2) var(--spacing-6);
+  }
+}
+
+@media (max-width: 400px) {
+  .feed {
+    padding: 0;
+  }
+}
+
+// Card meta wrapping at narrow container widths
+@container card (max-width: 400px) {
+  .card-meta {
+    flex-wrap: wrap;
+  }
 }

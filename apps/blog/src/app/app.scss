@@ -92,6 +92,31 @@
   }
 }
 
+// Compact header for narrow viewports
+@media (max-width: 480px) {
+  .header-inner {
+    padding: var(--spacing-8) var(--spacing-12);
+  }
+
+  .logo-text {
+    font-size: 0.95rem;
+  }
+
+  .nav {
+    gap: var(--spacing-8);
+  }
+
+  .nav-link {
+    font-size: 0.6875rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .nav-link {
+    display: none;
+  }
+}
+
 // Footer
 .site-footer {
   border-top: 1px solid var(--ghost-border);
@@ -128,4 +153,12 @@
   color: var(--on-surface-variant);
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+
+// Responsive
+@media (max-width: 640px) {
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+  }
 }

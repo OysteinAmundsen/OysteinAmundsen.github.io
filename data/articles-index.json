@@ -21,12 +21,12 @@
   {
     "id": "art-1774733400000",
     "title": "Angular SSR meets NestJS: Lessons learned from a single Express instance",
-    "slug": "angular-ssr-meets-nestjs-lessons-learned",
+    "slug": "angular-ssr-meets-nestjs-lessons-learned-from-a-single-express-instance",
     "excerpt": "What happens when you run Angular's SSR engine and a full NestJS backend on the same Express server? A deep dive into the architecture, the gotchas, and the lessons learned from building a full-stack playground.",
     "coverImage": "",
     "status": "published",
     "author": "Øystein Amundsen",
-    "readTime": "8 min",
+    "readTime": "6 min",
     "tags": [
       "angular",
       "nestjs",
@@ -35,8 +35,25 @@
       "express",
       "lessons-learned"
     ],
-    "createdAt": "2026-03-28T21:50:00.000Z",
-    "updatedAt": "2026-03-28T21:50:00.000Z",
+    "createdAt": "2025-06-10T19:50:00.000Z",
+    "updatedAt": "2026-04-03T18:15:11.110Z",
+    "publishedAt": null
+  },
+  {
+    "id": "art-1775240589992",
+    "title": "Welcome to my blog",
+    "slug": "welcome-to-my-blog",
+    "excerpt": "There are a myriad of CMS software out in the wild. But being a software developer myself, I didn't want to use any of them - so I created my own. This blog software is based on earlier discoveries,…",
+    "coverImage": "",
+    "status": "draft",
+    "author": "Øystein Amundsen",
+    "createdAt": "2026-04-03T18:23:09.992Z",
+    "readTime": "2 min",
+    "tags": [
+      "angular",
+      "open-source"
+    ],
+    "updatedAt": "2026-04-03T18:44:22.239Z",
     "publishedAt": null
   }
 ]

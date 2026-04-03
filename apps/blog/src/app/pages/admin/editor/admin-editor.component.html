@@ -141,6 +141,16 @@
     </div>
 
     <div class="sidebar-section">
+      <h4 class="sidebar-label">Created</h4>
+      <input
+        type="datetime-local"
+        class="field-input"
+        [value]="createdAtLocal()"
+        (input)="onCreatedAtChange($event)"
+      />
+    </div>
+
+    <div class="sidebar-section">
       <h4 class="sidebar-label">Read Time</h4>
       <span class="read-time-display">{{ readTime() }}</span>
     </div>

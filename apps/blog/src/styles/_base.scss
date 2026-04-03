@@ -11,9 +11,11 @@
 }
 
 html {
-  font-size: 16px;
+  // 14px at 320 vw → 16px at 480 vw, capped at both ends
+  font-size: clamp(14px, 10px + 1.25vw, 16px);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
 }
 
 body {
@@ -22,6 +24,12 @@ body {
   color: var(--on-background);
   line-height: 1.6;
   min-height: 100vh;
+}
+
+// Prevent routed components from overflowing the viewport
+app-root > router-outlet + * {
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 // Typography

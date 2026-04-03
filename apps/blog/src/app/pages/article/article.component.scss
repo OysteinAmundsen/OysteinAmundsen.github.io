@@ -8,10 +8,11 @@
   padding: var(--spacing-24) 0 var(--spacing-16);
 
   &.has-cover {
-    // Break out of the max-width container to span full viewport width
-    margin-left: calc(-50vw + 50%);
-    margin-right: calc(-50vw + 50%);
-    padding: var(--spacing-24) max(var(--spacing-16), calc(50vw - 400px));
+    // Cancel parent padding so the hero spans the full container width.
+    // At narrow viewports the container IS the viewport, so this gives full-bleed.
+    margin-left: calc(-1 * var(--spacing-16));
+    margin-right: calc(-1 * var(--spacing-16));
+    padding: var(--spacing-24) var(--spacing-16);
 
     background-size: cover;
     background-position: center;
@@ -135,4 +136,40 @@
   padding: var(--spacing-24) 0;
   border-top: 1px solid var(--ghost-border);
   margin-top: var(--spacing-24);
+}
+
+// When the container is constrained by max-width, use vw-based breakout
+// for true full-bleed across the entire viewport.
+@media (min-width: 800px) {
+  .article-hero.has-cover {
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    padding: var(--spacing-24) max(var(--spacing-16), calc(50vw - 400px));
+  }
+}
+
+// Responsive
+@media (max-width: 640px) {
+  .article-page {
+    padding: 0 var(--spacing-8);
+  }
+
+  .article-title {
+    font-size: 1.75rem;
+  }
+
+  .article-meta-bar {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 400px) {
+  .article-page {
+    padding: 0;
+  }
+
+  .article-hero.has-cover {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }

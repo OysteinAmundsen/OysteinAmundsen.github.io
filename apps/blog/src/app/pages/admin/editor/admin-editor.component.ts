@@ -23,6 +23,7 @@ interface ArticleFormModel {
   coverImage: string;
   status: string;
   author: string;
+  createdAt: string;
 }
 
 @Component({
@@ -46,6 +47,7 @@ export class AdminEditorComponent {
     coverImage: "",
     status: "draft",
     author: "Øystein Amundsen",
+    createdAt: new Date().toISOString(),
   });
 
   readonly articleForm = form(this.formModel);
@@ -98,6 +100,20 @@ export class AdminEditorComponent {
 
   readonly uploading = signal(false);
   readonly suggestedTags = signal<string[]>([]);
+
+  // Format ISO date for datetime-local input
+  readonly createdAtLocal = computed(() => {
+    const iso = this.formModel().createdAt;
+    if (!iso) return "";
+    return iso.slice(0, 16); // "YYYY-MM-DDTHH:mm"
+  });
+
+  onCreatedAtChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    if (value) {
+      this.articleForm.createdAt().value.set(new Date(value).toISOString());
+    }
+  }
   readonly suggestingTags = signal(false);
   readonly generatingExcerpt = signal(false);
   protected readonly excerptOverridden = signal(false);
@@ -120,6 +136,7 @@ export class AdminEditorComponent {
               coverImage: found.coverImage,
               status: found.status,
               author: found.author,
+              createdAt: found.createdAt,
             });
             this.tags.set([...found.tags]);
             // If article had a custom excerpt, mark as overridden
@@ -302,7 +319,7 @@ export class AdminEditorComponent {
       readTime: this.readTime(),
       status: formData.status as ArticleStatus,
       tags: this.tags(),
-      createdAt: orig?.createdAt ?? new Date().toISOString(),
+      createdAt: formData.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       publishedAt: orig?.publishedAt ?? null,
     };
