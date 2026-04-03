@@ -45,15 +45,15 @@
     "slug": "welcome-to-my-blog",
     "excerpt": "There are a myriad of CMS software out in the wild. But being a software developer myself, I didn't want to use any of them - so I created my own. This blog software is based on earlier discoveries,…",
     "coverImage": "",
-    "status": "draft",
+    "status": "published",
     "author": "Øystein Amundsen",
     "createdAt": "2026-04-03T18:23:09.992Z",
-    "readTime": "2 min",
+    "readTime": "4 min",
     "tags": [
       "angular",
       "open-source"
     ],
-    "updatedAt": "2026-04-03T18:44:22.239Z",
+    "updatedAt": "2026-04-03T19:25:45.582Z",
     "publishedAt": null
   }
 ]
