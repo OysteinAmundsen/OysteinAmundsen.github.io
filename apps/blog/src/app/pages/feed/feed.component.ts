@@ -1,12 +1,13 @@
 import { DatePipe, NgOptimizedImage } from "@angular/common";
 import { Component, computed, inject, signal } from "@angular/core";
 import { ArticleIndex, ArticleService, SeoService } from "@blog/shared";
+import { GiscusStatsComponent } from "./giscus-stats.component";
 
 const PAGE_SIZE = 12;
 
 @Component({
   selector: "app-feed",
-  imports: [DatePipe, NgOptimizedImage],
+  imports: [DatePipe, NgOptimizedImage, GiscusStatsComponent],
   templateUrl: "./feed.component.html",
   styleUrl: "./feed.component.scss",
 })

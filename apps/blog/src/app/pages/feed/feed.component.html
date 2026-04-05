@@ -70,6 +70,11 @@
             <p class="card-excerpt">{{ article.excerpt }}</p>
             <div class="card-footer">
               <span class="card-readtime">{{ article.readTime }} read</span>
+              @defer (on viewport) {
+                <app-giscus-stats [slug]="article.slug" />
+              } @placeholder {
+                <span></span>
+              }
               <span class="card-date">{{
                 article.publishedAt | date: "mediumDate"
               }}</span>
