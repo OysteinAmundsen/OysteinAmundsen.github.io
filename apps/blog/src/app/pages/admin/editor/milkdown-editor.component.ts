@@ -77,6 +77,7 @@ const proseHighlightStyle = HighlightStyle.define([
 export class MilkdownEditorComponent implements OnDestroy {
   readonly value = input<string>("");
   readonly valueChange = output<string>();
+  readonly imageUpload = input<(file: File) => Promise<string>>();
 
   private readonly editorHost =
     viewChild.required<ElementRef<HTMLElement>>("editorHost");
@@ -102,6 +103,8 @@ export class MilkdownEditorComponent implements OnDestroy {
   private async initEditor() {
     const host = this.editorHost().nativeElement;
 
+    const uploadHandler = this.imageUpload();
+
     this.crepe = new Crepe({
       root: host,
       defaultValue: this.value(),
@@ -109,13 +112,26 @@ export class MilkdownEditorComponent implements OnDestroy {
         [Crepe.Feature.CodeMirror]: {
           theme: syntaxHighlighting(proseHighlightStyle),
         },
+        ...(uploadHandler
+          ? {
+              [Crepe.Feature.ImageBlock]: {
+                onUpload: uploadHandler,
+                blockOnUpload: uploadHandler,
+                inlineOnUpload: uploadHandler,
+              },
+            }
+          : {}),
       },
     });
 
     this.crepe.on((listener) => {
       listener.markdownUpdated((_ctx, markdown) => {
         this.lastSyncedValue = markdown;
-        this.valueChange.emit(markdown);
+        // Only emit after initial creation to avoid overwriting
+        // saved content with the editor's re-serialized formatting
+        if (this.crepeReady()) {
+          this.valueChange.emit(markdown);
+        }
       });
     });
 

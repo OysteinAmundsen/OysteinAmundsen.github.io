@@ -99,6 +99,16 @@ export class AdminEditorComponent {
   });
 
   readonly uploading = signal(false);
+  readonly markdownMode = signal(false);
+
+  /** Handler passed to the milkdown editor for in-content image uploads */
+  readonly editorImageUpload = (file: File): Promise<string> =>
+    new Promise((resolve, reject) =>
+      this.articleService.uploadImage(file).subscribe({
+        next: ({ url }) => resolve(url),
+        error: (err) => reject(err),
+      }),
+    );
   readonly suggestedTags = signal<string[]>([]);
 
   // Format ISO date for datetime-local input

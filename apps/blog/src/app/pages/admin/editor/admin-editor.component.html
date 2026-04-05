@@ -20,11 +20,41 @@
       <span class="slug-value">{{ autoSlug() }}</span>
     </div>
 
+    <!-- Editor mode toggle -->
+    <div class="editor-mode-toggle">
+      <button
+        class="toggle-btn"
+        [class.active]="!markdownMode()"
+        (click)="markdownMode.set(false)"
+      >
+        <span class="material-icons">edit_note</span>
+        WYSIWYG
+      </button>
+      <button
+        class="toggle-btn"
+        [class.active]="markdownMode()"
+        (click)="markdownMode.set(true)"
+      >
+        <span class="material-icons">code</span>
+        Markdown
+      </button>
+    </div>
+
     <!-- WYSIWYG Markdown Editor -->
-    <app-milkdown-editor
-      [value]="formModel().content"
-      (valueChange)="onContentChange($event)"
-    />
+    @if (markdownMode()) {
+      <textarea
+        class="markdown-textarea"
+        [value]="formModel().content"
+        (input)="onContentChange($any($event.target).value)"
+        placeholder="Write markdown here…"
+      ></textarea>
+    } @else {
+      <app-milkdown-editor
+        [value]="formModel().content"
+        [imageUpload]="editorImageUpload"
+        (valueChange)="onContentChange($event)"
+      />
+    }
   </div>
 
   <!-- Sidebar metadata -->

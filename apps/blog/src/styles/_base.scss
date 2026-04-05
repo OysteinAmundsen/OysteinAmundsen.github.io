@@ -29,7 +29,7 @@ body {
 // Prevent routed components from overflowing the viewport
 app-root > router-outlet + * {
   min-width: 0;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 // Typography

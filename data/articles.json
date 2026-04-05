@@ -9,7 +9,12 @@
     "status": "published",
     "author": "Øystein Amundsen",
     "readTime": "5 min",
-    "tags": ["data-grid", "webcomponents", "angular", "open-source"],
+    "tags": [
+      "data-grid",
+      "webcomponents",
+      "angular",
+      "open-source"
+    ],
     "createdAt": "2026-03-28T21:01:01.843Z",
     "updatedAt": "2026-03-28T21:47:04.609Z",
     "publishedAt": "2026-03-28T21:01:01.843Z"
@@ -47,8 +52,46 @@
     "author": "Øystein Amundsen",
     "createdAt": "2026-04-03T18:23:09.992Z",
     "readTime": "4 min",
-    "tags": ["angular", "open-source"],
+    "tags": [
+      "angular",
+      "open-source"
+    ],
     "updatedAt": "2026-04-03T19:46:10.654Z",
     "publishedAt": "2026-04-03T18:23:09.992Z"
+  },
+  {
+    "id": "art-1775247353175",
+    "title": "",
+    "slug": "",
+    "excerpt": "I've been using VSCode with Copilot for a while now and these are my notes. I think that AI coding might be the future. The amount of work I get done by vibe coding vs what I would have achieved  by…",
+    "content": "# Thoughts on Vibe coding\n\nI've been using VSCode with Copilot for a while now and these are my notes. I think that AI coding might be the future. The amount of work I get done by vibe coding vs what I would have achieved  by manual coding is astonishing. But I am afraid of where this takes us. I find that my critical thinking \n",
+    "coverImage": "",
+    "status": "draft",
+    "author": "Øystein Amundsen",
+    "createdAt": "2026-04-03T20:15:53.175Z",
+    "readTime": "1 min",
+    "tags": [],
+    "updatedAt": "2026-04-03T20:15:53.175Z",
+    "publishedAt": null
+  },
+  {
+    "id": "art-1775420400000",
+    "title": "We Benchmarked Our Grid Against AG Grid. Here Are the Numbers.",
+    "slug": "we-benchmarked-our-grid-against-ag-grid-here-are-the-numbers",
+    "excerpt": "Every grid library says it's fast. Proving it is harder, so I built a benchmark you can run yourself.",
+    "content": "*Every grid library says it's fast. Proving it is harder, so I built a benchmark you can run yourself.*\n\n## Show, Don't Tell\n\nThe benchmark lives on [my documentation site](https://toolboxjs.com/grid/comparison/#performance-that-scales) as an interactive demo. Click a button, wait a few minutes, get numbers. No install, no setup, no trust required.\n\nBoth grids render into the same container, one at a time. Same column definitions (10 columns), same generated data, same operations. Scale points: **5K, 100K, 500K, and 1M rows**. Nine metrics — initial render, scroll frame time, sort, filter, data replacement, single row update, column resize, scroll-to-end, and memory. Nothing exotic. These are the operations your users actually do.\n\nEach metric runs **5 iterations per scale point**. I drop the high and low, report the trimmed mean. This kills GC spikes and JIT warm-up noise that make single-run benchmarks useless. Timing uses `performance.now()` around the API call plus one `requestAnimationFrame` to capture deferred rendering. Both grids measured the same way. AG Grid Community loaded from CDN, latest version. No enterprise features on either side.\n\n## The Numbers\n\nHere's a typical run:\n\n![1.00](/images/articles/1775411778762-2026-04-05-19_45_04-clipboard.png)\n\n| Metric            | Toolbox Grid advantage |\n| ----------------- | ---------------------- |\n| Initial render    | **2.5×** faster        |\n| Scroll avg frame  | **1.4×** faster        |\n| Sort              | **13.1×** faster       |\n| Filter            | **1.5×** faster        |\n| Data replacement  | **1.8×** faster        |\n| Single row update | **2.7×** faster        |\n| Column resize     | **2.3×** faster        |\n| Scroll to end     | **1.5×** faster        |\n\nToolbox Grid won **30 of 36 data points** across all scale points and metrics. One tie. Geometric mean across all time-based metrics: **2.3× faster**.\n\n### That Sort Number\n\nYeah, 13.1×. At 1M rows: \\~19ms vs \\~292ms. I double-checked this one multiple times because it looked wrong. It's not. The grid sorts in-place with a compiled comparator — no intermediate array allocation, no copying a million elements into a new structure. The difference compounds at scale.\n\n### Where AG Grid Wins\n\n**Memory at 1M rows.** At smaller datasets (5K–500K), Toolbox Grid uses less heap. But at a million rows, AG Grid's memory footprint is about 1.2× smaller. This is real, I'm not going to hide it, and it's something I'm actively working on.\n\n### The Small Dataset Reality\n\nAt 5K rows, most of these metrics land under 17ms — one frame at 60fps. Both grids handle it fine. Performance alone won't decide anything at that scale.\n\nBut here's what might: Toolbox Grid's core is ~42KB gzipped. AG Grid Community is ~200KB+. You're getting a grid that's both faster *and* a fifth of the size. For teams that care about Core Web Vitals, mobile load times, or just not shipping 200KB of JavaScript for a table — that math is hard to ignore, even before the performance gap kicks in at 100K+ rows.\n\n## Why It's Fast\n\n**\\~42KB gzipped, zero dependencies, no framework runtime.** Toolbox Grid is a native Web Component. No virtual DOM diffing, no reconciliation loop. Less to parse, less to evaluate, faster time-to-interactive. When the grid decides to update a cell, it updates a cell.\n\n**Virtualization with DOM recycling.** Only visible rows exist in the DOM — but I don't destroy and recreate them on scroll either. The same row elements stay in place; only the data inside them changes. DOM operations are expensive. Moving text content between existing elements is almost free. That's why scroll frame times stay flat from 5K to 1M rows.\n\n**In-place sort.** Most grids allocate a new array, copy the data, then sort the copy. At a million rows, that allocation and copy is the real cost — it dwarfs the time spent in the actual sort loop. Toolbox Grid sorts its internal array in-place with a pre-compiled comparator, skipping the allocation entirely.\n\n**Compiled filter predicates.** A numeric filter compiles to `row.id > threshold`, not a generic function that coerces types on every row. At 500K+ rows, that per-row overhead is measurable.\n\n**Phase-based render scheduler.** Updates don't just batch into a single `requestAnimationFrame` — they flow through a six-phase pipeline where higher phases implicitly cover lower ones, so no work runs twice. Scroll rendering bypasses the scheduler entirely as a synchronous hot path. The full details are in the [architecture docs](https://toolboxjs.com/grid/architecture/).\n\n## It's Not Just Performance\n\nPerformance matters, but not if the grid can't do what you need. Toolbox Grid covers the same ground as AG Grid Enterprise — range selection, clipboard, row grouping, pivot tables, tree data, master-detail, server-side data, context menus, Excel export, undo/redo, column groups, drag & drop, print — all under MIT. The [full plugin list](https://toolboxjs.com/grid/plugins/) is worth a look if you're comparing feature sets.\n\nThe framework adapters aren't thin wrappers either. Angular gets structural directives (`*tbwRenderer`, `*tbwEditor`), reactive forms integration, and injectable services like `injectGridSelection()`. React gets JSX renderers, `onRowsChange` callbacks, and feature-scoped hooks like `useGridFiltering()`. Vue gets `#cell`/`#editor` slots and composables. Each adapter speaks its framework's language — you're not writing Web Component boilerplate in an Angular app.\n\n## Run It Yourself\n\nThe benchmark is client-side and deterministic. Visit the [comparison page](https://toolboxjs.com/grid/comparison/#performance-that-scales), click **Run Comparison**, and watch it work through 5K → 100K → 500K → 1M rows. Takes a few minutes.\n\nThe source is [on GitHub](https://github.com/OysteinAmundsen/toolbox/blob/main/apps/docs/src/components/demos/PerformanceComparisonDemo.astro). No hidden test harnesses.\n\nIf you find a scenario where AG Grid is faster — beyond memory at 1M — open an issue. I'll either fix the grid or add the scenario to the benchmark.\n\nThe numbers are there. Run them.\n\n***\n\n*Tested: Toolbox Grid (latest) vs AG Grid Community (latest, CDN). Chrome, Windows 11. Relative performance is what matters — absolute ms varies by hardware.*\n",
+    "coverImage": "/images/articles/1775425909943-racing-light-trails-.png",
+    "status": "published",
+    "author": "Øystein Amundsen",
+    "createdAt": "2026-04-05T12:00:00.000Z",
+    "readTime": "5 min",
+    "tags": [
+      "performance",
+      "data-grid",
+      "webcomponents",
+      "benchmarks"
+    ],
+    "updatedAt": "2026-04-05T21:51:57.092Z",
+    "publishedAt": "2026-04-05T20:51:53.296Z"
   }
 ]
