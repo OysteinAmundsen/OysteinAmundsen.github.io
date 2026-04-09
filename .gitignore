@@ -27,3 +27,7 @@ Thumbs.db
 
 # Misc
 *.log
+
+# Generated files
+apps/blog/public/sitemap*.xml
+data/articles-index.json
