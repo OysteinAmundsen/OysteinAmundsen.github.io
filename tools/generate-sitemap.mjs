@@ -1,11 +1,8 @@
 /**
- * Generates a sitemap index with chunked sitemaps from published articles.
+ * Generates a single sitemap.xml from published articles.
  *
  * Output:
- *   apps/blog/public/sitemap-index.xml  (index pointing to chunks)
- *   apps/blog/public/sitemap_0.xml      (first ≤ MAX_URLS_PER_SITEMAP URLs)
- *   apps/blog/public/sitemap_1.xml      (next chunk, if needed)
- *   …
+ *   apps/blog/public/sitemap.xml
  *
  * Run: node tools/generate-sitemap.mjs
  */
@@ -18,7 +15,6 @@ const articlesPath = resolve(__dirname, "../data/articles.json");
 const publicDir = resolve(__dirname, "../apps/blog/public");
 
 const SITE_URL = "https://oysteinamundsen.github.io";
-const MAX_URLS_PER_SITEMAP = 5000;
 
 const articles = JSON.parse(readFileSync(articlesPath, "utf-8"));
 const published = articles.filter((a) => a.status === "published");
@@ -40,25 +36,16 @@ const urls = [
   })),
 ];
 
-// Remove old sitemap chunk files
+// Remove old sitemap files
 for (const file of readdirSync(publicDir)) {
-  if (/^sitemap(_\d+)?\.xml$/.test(file)) {
+  if (/^sitemap[_-]?\w*\.xml$/.test(file)) {
     unlinkSync(resolve(publicDir, file));
   }
 }
 
-// Split URLs into chunks and write each as sitemap_N.xml
-const chunks = [];
-for (let i = 0; i < urls.length; i += MAX_URLS_PER_SITEMAP) {
-  chunks.push(urls.slice(i, i + MAX_URLS_PER_SITEMAP));
-}
-
-const now = new Date().toISOString().split("T")[0];
-
-for (let i = 0; i < chunks.length; i++) {
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${chunks[i]
+${urls
   .map(
     (u) => `  <url>
     <loc>${u.loc}</loc>
@@ -70,24 +57,8 @@ ${chunks[i]
   .join("\n")}
 </urlset>
 `;
-  writeFileSync(resolve(publicDir, `sitemap_${i}.xml`), xml);
-}
-
-// Write sitemap index
-const indexXml = `<?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${chunks
-  .map(
-    (_, i) => `  <sitemap>
-    <loc>${SITE_URL}/sitemap_${i}.xml</loc>
-    <lastmod>${now}</lastmod>
-  </sitemap>`,
-  )
-  .join("\n")}
-</sitemapindex>
-`;
-writeFileSync(resolve(publicDir, "sitemap-index.xml"), indexXml);
+writeFileSync(resolve(publicDir, "sitemap.xml"), xml);
 
 console.log(
-  `Generated sitemap-index.xml → ${chunks.length} chunk(s) (${urls.length} URLs: 1 homepage + ${published.length} articles)`,
+  `Generated sitemap.xml (${urls.length} URLs: 1 homepage + ${published.length} articles)`,
 );

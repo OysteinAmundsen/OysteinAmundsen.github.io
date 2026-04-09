@@ -29,5 +29,5 @@ Thumbs.db
 *.log
 
 # Generated files
-apps/blog/public/sitemap*.xml
+apps/blog/public/sitemap.xml
 data/articles-index.json
