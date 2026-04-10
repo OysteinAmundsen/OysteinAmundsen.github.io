@@ -37,6 +37,32 @@
   animation: vt-shrink-in 250ms ease-out both;
 }
 
+// ── Same-document filter transitions ──────────────────────
+html:active-view-transition-type(filter) {
+  // Suppress the content-level fade so individual cards animate independently.
+  &::view-transition-old(content),
+  &::view-transition-new(content),
+  &::view-transition-group(content) {
+    animation: none;
+  }
+
+  // Card group morphing (position + size): longer for dramatic layout changes
+  &::view-transition-group(*) {
+    animation-duration: 400ms;
+    animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  // Keep root and header static
+  &::view-transition-group(root),
+  &::view-transition-old(root),
+  &::view-transition-new(root),
+  &::view-transition-group(header),
+  &::view-transition-old(header),
+  &::view-transition-new(header) {
+    animation: none;
+  }
+}
+
 @keyframes vt-fade-out {
   to {
     opacity: 0;

@@ -47,12 +47,16 @@
         <a [href]="'/article/' + article.slug" class="card-link">
           @if (article.coverImage) {
             <div class="card-cover">
-              <img
-                [ngSrc]="article.coverImage"
-                [alt]="article.title"
-                fill
-                [priority]="featured"
-              />
+              @if (featured) {
+                <img
+                  [ngSrc]="article.coverImage"
+                  [alt]="article.title"
+                  fill
+                  priority
+                />
+              } @else {
+                <img [ngSrc]="article.coverImage" [alt]="article.title" fill />
+              }
             </div>
           }
           <div class="card-content">

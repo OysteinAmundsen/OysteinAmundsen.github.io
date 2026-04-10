@@ -1,5 +1,11 @@
-import { DatePipe, NgOptimizedImage } from "@angular/common";
-import { Component, computed, inject, signal } from "@angular/core";
+import { DatePipe, DOCUMENT, NgOptimizedImage } from "@angular/common";
+import {
+  ApplicationRef,
+  Component,
+  computed,
+  inject,
+  signal,
+} from "@angular/core";
 import { ArticleIndex, ArticleService, SeoService } from "@blog/shared";
 import { GiscusStatsComponent } from "./giscus-stats.component";
 
@@ -14,6 +20,8 @@ const PAGE_SIZE = 12;
 export class FeedComponent {
   private articleService = inject(ArticleService);
   private seoService = inject(SeoService);
+  private doc = inject(DOCUMENT);
+  private appRef = inject(ApplicationRef);
 
   readonly articles = signal<ArticleIndex[]>([]);
   readonly activeTag = signal("");
@@ -68,16 +76,48 @@ export class FeedComponent {
   }
 
   filterByTag(tag: string) {
-    this.activeTag.set(this.activeTag() === tag ? "" : tag);
-    this.page.set(1);
+    this.withFilterTransition(() => {
+      this.activeTag.set(this.activeTag() === tag ? "" : tag);
+      this.page.set(1);
+    });
   }
 
   onSearch(event: Event) {
-    this.searchQuery.set((event.target as HTMLInputElement).value);
-    this.page.set(1);
+    this.withFilterTransition(() => {
+      this.searchQuery.set((event.target as HTMLInputElement).value);
+      this.page.set(1);
+    });
   }
 
   loadMore() {
-    this.page.update((p) => p + 1);
+    this.withFilterTransition(() => {
+      this.page.update((p) => p + 1);
+    });
+  }
+
+  private withFilterTransition(update: () => void) {
+    const startViewTransition = (
+      this.doc as Document & {
+        startViewTransition?: (
+          arg: (() => void) | { update: () => void; types: string[] },
+        ) => void;
+      }
+    ).startViewTransition;
+    if (!startViewTransition) {
+      update();
+      return;
+    }
+    const flushUpdate = () => {
+      update();
+      this.appRef.tick();
+    };
+    try {
+      startViewTransition.call(this.doc, {
+        update: flushUpdate,
+        types: ["filter"],
+      });
+    } catch {
+      startViewTransition.call(this.doc, flushUpdate);
+    }
   }
 }
