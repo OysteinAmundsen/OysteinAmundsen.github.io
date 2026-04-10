@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
-import { Observable, catchError, map, of, tap } from "rxjs";
+import { Observable, catchError, map, of, shareReplay } from "rxjs";
 
 export interface GiscusDiscussionStats {
   totalCommentCount: number;
@@ -8,53 +8,50 @@ export interface GiscusDiscussionStats {
   reactionCount: number;
 }
 
-interface GiscusApiResponse {
-  discussion?: {
-    totalCommentCount: number;
-    totalReplyCount: number;
-    reactionCount: number;
-  };
-  error?: string;
+interface GitHubDiscussion {
+  title: string;
+  comments: number;
+  reactions: { total_count: number };
+  category?: { name: string };
 }
 
 const GISCUS_REPO = "OysteinAmundsen/OysteinAmundsen.github.io";
-const GISCUS_CATEGORY = "Announcements";
 
 @Injectable({ providedIn: "root" })
 export class GiscusService {
   private http = inject(HttpClient);
-  private cache = new Map<string, GiscusDiscussionStats>();
+  private discussions$?: Observable<Map<string, GiscusDiscussionStats>>;
 
   getDiscussionStats(term: string): Observable<GiscusDiscussionStats | null> {
-    const cached = this.cache.get(term);
-    if (cached) {
-      return of(cached);
-    }
-
-    const url = `https://giscus.app/api/discussions`;
-    const params = {
-      repo: GISCUS_REPO,
-      term,
-      category: GISCUS_CATEGORY,
-      strict: "false",
-      first: "0",
-    };
-
-    return this.http.get<GiscusApiResponse>(url, { params }).pipe(
-      map((res) => {
-        if (res.error || !res.discussion) return null;
-        return {
-          totalCommentCount: res.discussion.totalCommentCount,
-          totalReplyCount: res.discussion.totalReplyCount,
-          reactionCount: res.discussion.reactionCount,
-        };
-      }),
-      tap((stats) => {
-        if (stats) {
-          this.cache.set(term, stats);
-        }
-      }),
+    return this.getAllDiscussions().pipe(
+      map((statsMap) => statsMap.get(term) ?? null),
       catchError(() => of(null)),
     );
+  }
+
+  private getAllDiscussions(): Observable<Map<string, GiscusDiscussionStats>> {
+    if (!this.discussions$) {
+      const url = `https://api.github.com/repos/${GISCUS_REPO}/discussions`;
+      this.discussions$ = this.http
+        .get<GitHubDiscussion[]>(url, {
+          params: { per_page: "100" },
+          headers: { Accept: "application/vnd.github+json" },
+        })
+        .pipe(
+          map((discussions) => {
+            const statsMap = new Map<string, GiscusDiscussionStats>();
+            for (const d of discussions) {
+              statsMap.set(d.title, {
+                totalCommentCount: d.comments,
+                totalReplyCount: 0,
+                reactionCount: d.reactions.total_count,
+              });
+            }
+            return statsMap;
+          }),
+          shareReplay(1),
+        );
+    }
+    return this.discussions$;
   }
 }
