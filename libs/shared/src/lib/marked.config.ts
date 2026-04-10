@@ -14,6 +14,7 @@ hljs.registerLanguage("bash", bash);
 hljs.registerLanguage("json", json);
 
 marked.use(
+  { gfm: true, breaks: false },
   markedHighlight({
     langPrefix: "hljs language-",
     highlight(code, lang) {
@@ -24,5 +25,25 @@ marked.use(
     },
   }),
 );
+
+// Require double-tilde ~~ for strikethrough (ignore single ~)
+marked.use({
+  tokenizer: {
+    del(src: string) {
+      const match = /^~~([\s\S]+?)~~(?!~)/.exec(src);
+      if (match) {
+        const token = {
+          type: "del" as const,
+          raw: match[0],
+          text: match[1],
+          tokens: [] as ReturnType<typeof this.lexer.inlineTokens>,
+        };
+        this.lexer.inlineTokens(token.text, token.tokens);
+        return token;
+      }
+      return undefined as unknown as false;
+    },
+  },
+});
 
 export { marked };

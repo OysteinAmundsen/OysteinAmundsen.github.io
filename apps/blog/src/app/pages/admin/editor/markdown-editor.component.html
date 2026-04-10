@@ -1,0 +1,38 @@
+<div class="cm-toolbar">
+  @for (item of toolbarItems; track $index) {
+    @if (item.separator) {
+      <span class="cm-toolbar-separator"></span>
+    } @else {
+      <button
+        type="button"
+        class="cm-toolbar-btn"
+        [title]="item.title"
+        [disabled]="markdownMode()"
+        (mousedown)="onToolbarAction($event, item)"
+      >
+        <span class="material-icons">{{ item.icon }}</span>
+      </button>
+    }
+  }
+  <span class="cm-toolbar-spacer"></span>
+  <button
+    type="button"
+    class="cm-toolbar-btn"
+    [title]="markdownMode() ? 'Switch to WYSIWYG' : 'Switch to code'"
+    (mousedown)="toggleMode($event)"
+  >
+    <span class="material-icons">{{
+      markdownMode() ? "edit_note" : "code"
+    }}</span>
+  </button>
+</div>
+@if (markdownMode()) {
+  <textarea
+    class="markdown-textarea"
+    [value]="value()"
+    (input)="onCodeInput($event)"
+    placeholder="Write markdown here…"
+  ></textarea>
+} @else {
+  <div class="editor-host" #editorHost></div>
+}

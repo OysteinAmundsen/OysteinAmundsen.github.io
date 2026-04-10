@@ -41,9 +41,12 @@
   // ── Inline code accent ────────────────────────────────────
   --code-inline: light-dark(#1a7a0a, #2ff801);
 
+  // ── Editor formatting markers ─────────────────────────────
+  --formatting-mark: light-dark(#a06020, #d4943a);
+
   // ── Tertiary (soft blue) ──────────────────────────────────
-  --tertiary: light-dark(#894e00, #65afff);
-  --tertiary-container: light-dark(#a86516, #4aa2f9);
+  --tertiary: light-dark(#894e00, #a86516);
+  --tertiary-container: light-dark(#a86516, #dd8819);
   --on-tertiary: light-dark(#ffffff, #002e52);
   --on-tertiary-container: light-dark(#fffbff, #00213e);
 

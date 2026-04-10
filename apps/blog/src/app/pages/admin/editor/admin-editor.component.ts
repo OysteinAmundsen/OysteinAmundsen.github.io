@@ -8,9 +8,9 @@ import {
   signal,
 } from "@angular/core";
 import { form, FormField } from "@angular/forms/signals";
-import { Router } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { Article, ArticleService, ArticleStatus } from "@blog/shared";
-import { MilkdownEditorComponent } from "./milkdown-editor.component";
+import { MarkdownEditorComponent } from "./markdown-editor.component";
 
 const WORDS_PER_MINUTE = 200;
 const EXCERPT_MAX_LENGTH = 200;
@@ -28,7 +28,7 @@ interface ArticleFormModel {
 
 @Component({
   selector: "app-admin-editor",
-  imports: [FormField, NgOptimizedImage, MilkdownEditorComponent],
+  imports: [FormField, NgOptimizedImage, MarkdownEditorComponent, RouterLink],
   templateUrl: "./admin-editor.component.html",
   styleUrl: "./admin-editor.component.scss",
 })
@@ -101,7 +101,7 @@ export class AdminEditorComponent {
   readonly uploading = signal(false);
   readonly markdownMode = signal(false);
 
-  /** Handler passed to the milkdown editor for in-content image uploads */
+  /** Handler passed to the editor for in-content image uploads */
   readonly editorImageUpload = (file: File): Promise<string> =>
     new Promise((resolve, reject) =>
       this.articleService.uploadImage(file).subscribe({

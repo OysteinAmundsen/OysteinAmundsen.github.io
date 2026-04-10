@@ -30,11 +30,7 @@
             "output": "/data"
           }
         ],
-        "styles": [
-          "apps/blog/src/styles.scss",
-          "@milkdown/crepe/theme/common/style.css",
-          "@milkdown/crepe/theme/frame-dark.css"
-        ],
+        "styles": ["apps/blog/src/styles.scss"],
         "server": "apps/blog/src/main.server.ts",
         "ssr": {
           "entry": "apps/blog/src/server.ts"
@@ -42,11 +38,6 @@
         "outputMode": "static",
         "loader": {
           ".md": "text"
-        },
-        "define": {
-          "__VUE_OPTIONS_API__": "false",
-          "__VUE_PROD_DEVTOOLS__": "false",
-          "__VUE_PROD_HYDRATION_MISMATCH_DETAILS__": "false"
         }
       },
       "configurations": {

@@ -1,7 +1,7 @@
 .admin-shell {
   display: grid;
   grid-template-columns: 240px 1fr;
-  min-height: 100%;
+  height: 100%;
 
   @media (max-width: 900px) {
     grid-template-columns: 52px 1fr;
@@ -37,6 +37,10 @@
   flex-direction: column;
   gap: var(--spacing-16);
   border-right: 1px solid var(--ghost-border);
+  position: relative;
+  nav {
+    position: fixed;
+  }
 }
 
 .sidebar-header {
@@ -107,7 +111,8 @@
 
 .admin-content {
   padding: var(--spacing-24);
-  min-height: 100%;
+  min-height: 0;
+  height: 100%;
   display: flex;
   flex-direction: column;
   min-width: 0;

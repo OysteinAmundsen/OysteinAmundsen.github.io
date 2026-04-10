@@ -15,46 +15,18 @@
     </div>
 
     <!-- Slug -->
-    <div class="field slug-field">
+    <a class="field slug-field" [routerLink]="'/article/' + autoSlug()">
       <span class="slug-prefix label">/article/</span>
       <span class="slug-value">{{ autoSlug() }}</span>
-    </div>
+    </a>
 
-    <!-- Editor mode toggle -->
-    <div class="editor-mode-toggle">
-      <button
-        class="toggle-btn"
-        [class.active]="!markdownMode()"
-        (click)="markdownMode.set(false)"
-      >
-        <span class="material-icons">edit_note</span>
-        WYSIWYG
-      </button>
-      <button
-        class="toggle-btn"
-        [class.active]="markdownMode()"
-        (click)="markdownMode.set(true)"
-      >
-        <span class="material-icons">code</span>
-        Markdown
-      </button>
-    </div>
-
-    <!-- WYSIWYG Markdown Editor -->
-    @if (markdownMode()) {
-      <textarea
-        class="markdown-textarea"
-        [value]="formModel().content"
-        (input)="onContentChange($any($event.target).value)"
-        placeholder="Write markdown here…"
-      ></textarea>
-    } @else {
-      <app-milkdown-editor
-        [value]="formModel().content"
-        [imageUpload]="editorImageUpload"
-        (valueChange)="onContentChange($event)"
-      />
-    }
+    <!-- Markdown Editor (handles both WYSIWYG and code mode) -->
+    <app-markdown-editor
+      [value]="formModel().content"
+      [imageUpload]="editorImageUpload"
+      [(markdownMode)]="markdownMode"
+      (valueChange)="onContentChange($event)"
+    />
   </div>
 
   <!-- Sidebar metadata -->
