@@ -47,20 +47,19 @@
         <a [href]="'/article/' + article.slug" class="card-link">
           @if (article.coverImage) {
             <div class="card-cover">
-              @if (featured) {
-                <img
-                  [ngSrc]="article.coverImage"
-                  [alt]="article.title"
-                  fill
-                  priority
-                />
-              } @else {
-                <img [ngSrc]="article.coverImage" [alt]="article.title" fill />
-              }
+              <img
+                [ngSrc]="article.coverImage"
+                [alt]="article.title"
+                fill
+                [attr.fetchpriority]="featured ? 'high' : 'auto'"
+              />
             </div>
           }
           <div class="card-content">
-            <div class="card-meta">
+            <div
+              class="card-meta"
+              [style.view-transition-name]="'meta-' + article.slug"
+            >
               @for (tag of article.tags; track tag) {
                 <span class="label">{{ tag }}</span>
               }
@@ -71,7 +70,12 @@
             >
               {{ article.title }}
             </h3>
-            <p class="card-excerpt">{{ article.excerpt }}</p>
+            <p
+              class="card-excerpt"
+              [style.view-transition-name]="'excerpt-' + article.slug"
+            >
+              {{ article.excerpt }}
+            </p>
             <div class="card-footer">
               <span class="card-readtime">{{ article.readTime }} read</span>
               @defer (on viewport) {
