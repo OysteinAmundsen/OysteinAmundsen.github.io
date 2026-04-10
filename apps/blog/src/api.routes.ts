@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { execSync } from "node:child_process";
 import {
   existsSync,
   mkdirSync,
@@ -136,4 +137,41 @@ apiRouter.post("/upload-image", (req, res) => {
   writeFileSync(destPath, buffer);
   cleanupOrphanedImages();
   res.status(201).json({ url: `/images/articles/${uniqueName}` });
+});
+
+apiRouter.post("/git/commit-and-push", (req, res) => {
+  const { message } = req.body as { message?: string };
+  if (!message) {
+    res.status(400).json({ error: "commit message is required" });
+    return;
+  }
+
+  const cwd = process.cwd();
+  try {
+    execSync("git add data/ apps/blog/public/images/articles/", {
+      cwd,
+      stdio: "pipe",
+    });
+
+    // Check if there are staged changes
+    const status = execSync("git diff --cached --stat", {
+      cwd,
+      encoding: "utf-8",
+    }).trim();
+    if (!status) {
+      res.json({ committed: false, message: "No changes to commit" });
+      return;
+    }
+
+    execSync(`git commit -m ${JSON.stringify(message)}`, {
+      cwd,
+      stdio: "pipe",
+    });
+    execSync("git push", { cwd, stdio: "pipe" });
+
+    res.json({ committed: true, message: "Changes committed and pushed" });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    res.status(500).json({ error: `Git operation failed: ${msg}` });
+  }
 });

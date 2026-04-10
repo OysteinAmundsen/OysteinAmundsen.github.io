@@ -10,6 +10,7 @@ import {
 import { form, FormField } from "@angular/forms/signals";
 import { Router, RouterLink } from "@angular/router";
 import { Article, ArticleService, ArticleStatus } from "@blog/shared";
+import { Observable, switchMap } from "rxjs";
 import { MarkdownEditorComponent } from "./markdown-editor.component";
 
 const WORDS_PER_MINUTE = 200;
@@ -339,16 +340,22 @@ export class AdminEditorComponent {
     };
   }
 
-  save() {
+  save(andCommit = false) {
     const article = this.buildArticle();
-    if (this.isNew()) {
-      this.articleService.createArticle(article).subscribe(() => {
-        this.router.navigate(["/admin"]);
-      });
+    const save$: Observable<Article> = this.isNew()
+      ? this.articleService.createArticle(article)
+      : this.articleService.saveArticle(article);
+
+    if (andCommit) {
+      save$
+        .pipe(
+          switchMap((saved) =>
+            this.articleService.commitAndPush(`publish: ${saved.title}`),
+          ),
+        )
+        .subscribe(() => this.router.navigate(["/admin"]));
     } else {
-      this.articleService.saveArticle(article).subscribe(() => {
-        this.router.navigate(["/admin"]);
-      });
+      save$.subscribe(() => this.router.navigate(["/admin"]));
     }
   }
 
@@ -373,7 +380,7 @@ export class AdminEditorComponent {
 
   publish() {
     this.articleForm.status().value.set("published");
-    this.save();
+    this.save(true);
   }
 
   cancel() {

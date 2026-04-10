@@ -51,6 +51,15 @@ export class ArticleService {
     return this.http.delete<void>(`/api/articles/${id}`);
   }
 
+  commitAndPush(
+    message: string,
+  ): Observable<{ committed: boolean; message: string }> {
+    return this.http.post<{ committed: boolean; message: string }>(
+      "/api/git/commit-and-push",
+      { message },
+    );
+  }
+
   uploadImage(file: File): Observable<{ url: string }> {
     return new Observable((subscriber) => {
       const reader = new FileReader();
