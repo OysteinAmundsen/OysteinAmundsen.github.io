@@ -30,6 +30,7 @@ function writeArticles(articles: unknown[]) {
     ({ content, ...meta }) => meta,
   );
   writeFileSync(indexFile, JSON.stringify(index, null, 2) + "\n", "utf-8");
+  cleanupOrphanedImages();
 }
 
 /** Remove images in imageDir that are not referenced by any article. */
@@ -135,7 +136,6 @@ apiRouter.post("/upload-image", (req, res) => {
   }
 
   writeFileSync(destPath, buffer);
-  cleanupOrphanedImages();
   res.status(201).json({ url: `/images/articles/${uniqueName}` });
 });
 

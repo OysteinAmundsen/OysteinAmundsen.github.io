@@ -190,11 +190,10 @@ export class AdminEditorComponent {
 
     this.generatingExcerpt.set(true);
     try {
-      const summarizer = await (window as any).Summarizer.create({
+      const summarizer = await this.createSummarizer({
         type: "teaser",
         format: "plain-text",
         length: "short",
-        outputLanguage: "en",
       });
       const result = await summarizer.summarize(content);
       summarizer.destroy?.();
@@ -202,8 +201,8 @@ export class AdminEditorComponent {
         this.articleForm.excerpt().value.set(result.trim());
         this.excerptOverridden.set(true);
       }
-    } catch {
-      // Fallback to auto-excerpt
+    } catch (err) {
+      console.error("generateExcerpt failed:", err);
       this.excerptOverridden.set(false);
     } finally {
       this.generatingExcerpt.set(false);
@@ -242,24 +241,70 @@ export class AdminEditorComponent {
 
     this.suggestingTags.set(true);
     try {
-      const summarizer = await (window as any).Summarizer.create({
+      const summarizer = await this.createSummarizer({
         type: "key-points",
         format: "plain-text",
         length: "short",
-        outputLanguage: "en",
-      });
-      const result = await summarizer.summarize(content, {
-        context:
+        sharedContext:
           "Extract 3-5 single-word or two-word topic tags for this technical article. Return only the tags.",
       });
+      const result = await summarizer.summarize(content);
       summarizer.destroy?.();
       const tags = this.parseTagsFromAI(result);
       this.suggestedTags.set(tags.filter((t) => !this.tags().includes(t)));
-    } catch {
+    } catch (err) {
+      console.error("suggestTags failed:", err);
       this.fallbackTagSuggestion(content);
     } finally {
       this.suggestingTags.set(false);
     }
+  }
+
+  /**
+   * Wrapper around `Summarizer.create()` that checks availability,
+   * wires a download-progress monitor, and reports status to the console.
+   * Throws if the model is unavailable.
+   */
+  private async createSummarizer(
+    options: Record<string, unknown>,
+  ): Promise<{
+    summarize: (input: string) => Promise<string>;
+    destroy?: () => void;
+  }> {
+    const Summarizer = (
+      window as unknown as {
+        Summarizer: {
+          availability: () => Promise<string>;
+          create: (
+            opts: unknown,
+          ) => Promise<{
+            summarize: (input: string) => Promise<string>;
+            destroy?: () => void;
+          }>;
+        };
+      }
+    ).Summarizer;
+    const availability = await Summarizer.availability();
+    if (availability === "unavailable") {
+      throw new Error("Summarizer API is unavailable in this browser");
+    }
+    if (availability !== "available") {
+      console.info(
+        `Summarizer model is '${availability}'. Downloading — this may take a while on first use.`,
+      );
+    }
+    return Summarizer.create({
+      ...options,
+      expectedInputLanguages: ["en"],
+      monitor(m: EventTarget) {
+        m.addEventListener("downloadprogress", (e: Event) => {
+          const progress = (e as ProgressEvent).loaded;
+          console.info(
+            `Summarizer model download: ${(progress * 100).toFixed(1)}%`,
+          );
+        });
+      },
+    });
   }
 
   private fallbackTagSuggestion(content: string) {
