@@ -47,16 +47,16 @@ Context-specific guidance is available in `.github/instructions/`. These are loa
 
 The mental model of each subsystem lives in `.github/knowledge/`. Load on demand when working in the matching paths.
 
-| File                                              | Domain            | Covers                                                                                          |
-| ------------------------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------- |
-| [routing-ssr](knowledge/routing-ssr.md)           | routing-ssr       | App routes, prerender strategy, hydration, Express SSR host, admin client-only mode             |
-| [article-data](knowledge/article-data.md)         | article-data      | `Article` model, `ArticleService`, `articles.json` source of truth, admin `/api/*`, image flow  |
+| File                                                | Domain            | Covers                                                                                          |
+| --------------------------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------- |
+| [routing-ssr](knowledge/routing-ssr.md)             | routing-ssr       | App routes, prerender strategy, hydration, Express SSR host, admin client-only mode             |
+| [article-data](knowledge/article-data.md)           | article-data      | `Article` model, `ArticleService`, `articles.json` source of truth, admin `/api/*`, image flow  |
 | [markdown-pipeline](knowledge/markdown-pipeline.md) | markdown-pipeline | `marked` config (GFM, hljs, double-tilde del), `ArticleComponent` rendering, prose styles       |
-| [markdown-editor](knowledge/markdown-editor.md)   | markdown-editor   | CodeMirror lifecycle, capture-phase list handlers, image drop/paste, live preview, table widget |
-| [admin-grid](knowledge/admin-grid.md)             | admin-grid        | `@toolbox-web/grid-angular` setup, column renderers, filtering controller                       |
-| [seo-comments](knowledge/seo-comments.md)         | seo-comments      | `SeoService` (OG/Twitter/JSON-LD), sitemap, Giscus iframe + GitHub discussions stats            |
-| [styling-theme](knowledge/styling-theme.md)       | styling-theme     | Design tokens, `light-dark()` theming, `data-theme`, view transitions, grid theme               |
-| [build-tooling](knowledge/build-tooling.md)       | build-tooling     | Nx targets, prebuild scripts, asset globs, SSR vs static output, deploy flow                    |
+| [markdown-editor](knowledge/markdown-editor.md)     | markdown-editor   | CodeMirror lifecycle, capture-phase list handlers, image drop/paste, live preview, table widget |
+| [admin-grid](knowledge/admin-grid.md)               | admin-grid        | `@toolbox-web/grid-angular` setup, column renderers, filtering controller                       |
+| [seo-comments](knowledge/seo-comments.md)           | seo-comments      | `SeoService` (OG/Twitter/JSON-LD), sitemap, Giscus iframe + GitHub discussions stats            |
+| [styling-theme](knowledge/styling-theme.md)         | styling-theme     | Design tokens, `light-dark()` theming, `data-theme`, view transitions, grid theme               |
+| [build-tooling](knowledge/build-tooling.md)         | build-tooling     | Nx targets, prebuild scripts, asset globs, SSR vs static output, deploy flow                    |
 
 ## Skills
 
