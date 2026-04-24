@@ -42,3 +42,43 @@ Context-specific guidance is available in `.github/instructions/`. These are loa
 - **SCSS** with CSS custom properties for theming
 - **Static SSR** output mode with `@angular/ssr`
 - **Component selector prefix**: `app`
+
+## Knowledge Reference
+
+The mental model of each subsystem lives in `.github/knowledge/`. Load on demand when working in the matching paths.
+
+| File                                              | Domain            | Covers                                                                                          |
+| ------------------------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------- |
+| [routing-ssr](knowledge/routing-ssr.md)           | routing-ssr       | App routes, prerender strategy, hydration, Express SSR host, admin client-only mode             |
+| [article-data](knowledge/article-data.md)         | article-data      | `Article` model, `ArticleService`, `articles.json` source of truth, admin `/api/*`, image flow  |
+| [markdown-pipeline](knowledge/markdown-pipeline.md) | markdown-pipeline | `marked` config (GFM, hljs, double-tilde del), `ArticleComponent` rendering, prose styles       |
+| [markdown-editor](knowledge/markdown-editor.md)   | markdown-editor   | CodeMirror lifecycle, capture-phase list handlers, image drop/paste, live preview, table widget |
+| [admin-grid](knowledge/admin-grid.md)             | admin-grid        | `@toolbox-web/grid-angular` setup, column renderers, filtering controller                       |
+| [seo-comments](knowledge/seo-comments.md)         | seo-comments      | `SeoService` (OG/Twitter/JSON-LD), sitemap, Giscus iframe + GitHub discussions stats            |
+| [styling-theme](knowledge/styling-theme.md)       | styling-theme     | Design tokens, `light-dark()` theming, `data-theme`, view transitions, grid theme               |
+| [build-tooling](knowledge/build-tooling.md)       | build-tooling     | Nx targets, prebuild scripts, asset globs, SSR vs static output, deploy flow                    |
+
+## Skills
+
+- [retrospective](skills/retrospective/SKILL.md) — post-task review that updates instructions/knowledge/skills
+
+> **Knowledge files — read before editing, write after learning:**
+>
+> - **Read gate:** Before editing any file in `apps/blog/**`, `libs/**`, or `tools/**`, or making a
+>   non-trivial change anywhere, you MUST first read the knowledge files
+>   that cover the affected domain. This rebuilds the mental model — state
+>   ownership, invariants, design rationale — so you can spot when a
+>   proposed change contradicts an earlier `DECIDED` entry and push back
+>   rather than silently regress it. Trivial edits (typos, comments,
+>   formatting) are exempt.
+> - **Write gate:** During or after any task, if you discover a new
+>   invariant, state-ownership fact, data-flow edge, design decision, or
+>   tension that is not already in a knowledge file, you MUST add it to the
+>   correct file using the structured notation (OWNS / READS FROM /
+>   WRITES TO / INVARIANT / FLOW / TENSION / DECIDED). These files are your
+>   externalized mental model — if you don't write it down, the next session
+>   will rediscover it from scratch.
+> - **Rule of thumb:** If the user argues for a change that contradicts a
+>   `DECIDED` entry, cite the entry and ask them to justify overriding it
+>   before implementing. Past decisions have context; don't silently reverse
+>   them.

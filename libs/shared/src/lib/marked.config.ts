@@ -46,4 +46,52 @@ marked.use({
   },
 });
 
+// Download links: [text](url){download} or [text](url){download=filename.ext}
+// Renders as <a href="url" download[="filename"]>text</a>.
+const DOWNLOAD_LINK_RE =
+  /^\[((?:\\.|[^\]\\])+?)\]\(((?:\\.|[^)\\])+?)\)\{download(?:=([^}]+))?\}/;
+
+function escapeAttr(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+marked.use({
+  extensions: [
+    {
+      name: "downloadLink",
+      level: "inline",
+      start(src: string) {
+        const idx = src.indexOf("[");
+        return idx < 0 ? undefined : idx;
+      },
+      tokenizer(src: string) {
+        const match = DOWNLOAD_LINK_RE.exec(src);
+        if (!match) return undefined;
+        const [raw, text, href, filename] = match;
+        return {
+          type: "downloadLink",
+          raw,
+          text,
+          href,
+          filename: filename?.trim() ?? "",
+          tokens: this.lexer.inlineTokens(text),
+        };
+      },
+      renderer(token) {
+        const inner = this.parser.parseInline(token["tokens"] ?? []);
+        const href = escapeAttr(token["href"]);
+        const filename = token["filename"];
+        const downloadAttr = filename
+          ? ` download="${escapeAttr(filename)}"`
+          : " download";
+        return `<a href="${href}"${downloadAttr}>${inner}</a>`;
+      },
+    },
+  ],
+});
+
 export { marked };

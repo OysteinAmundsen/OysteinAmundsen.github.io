@@ -1,7 +1,17 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable, inject } from "@angular/core";
+import { Injectable, inject, isDevMode } from "@angular/core";
 import { Observable, map } from "rxjs";
 import { Article, ArticleIndex } from "../models/article.model";
+
+/**
+ * In dev (`nx serve`), drafts are visible alongside published articles so
+ * authors can preview unpublished content on localhost. Production builds
+ * (deployed to GitHub Pages) keep drafts hidden — only `status === "published"`
+ * articles are listed or resolvable by slug.
+ */
+function isVisible(status: string): boolean {
+  return status === "published" || isDevMode();
+}
 
 @Injectable({ providedIn: "root" })
 export class ArticleService {
@@ -11,17 +21,13 @@ export class ArticleService {
   getPublishedIndex(): Observable<ArticleIndex[]> {
     return this.http
       .get<ArticleIndex[]>("/data/articles-index.json")
-      .pipe(
-        map((articles) => articles.filter((a) => a.status === "published")),
-      );
+      .pipe(map((articles) => articles.filter((a) => isVisible(a.status))));
   }
 
   getPublishedArticles(): Observable<Article[]> {
     return this.http
       .get<Article[]>("/data/articles.json")
-      .pipe(
-        map((articles) => articles.filter((a) => a.status === "published")),
-      );
+      .pipe(map((articles) => articles.filter((a) => isVisible(a.status))));
   }
 
   getArticleBySlug(slug: string): Observable<Article | undefined> {
@@ -29,7 +35,7 @@ export class ArticleService {
       .get<Article[]>("/data/articles.json")
       .pipe(
         map((articles) =>
-          articles.find((a) => a.slug === slug && a.status === "published"),
+          articles.find((a) => a.slug === slug && isVisible(a.status)),
         ),
       );
   }

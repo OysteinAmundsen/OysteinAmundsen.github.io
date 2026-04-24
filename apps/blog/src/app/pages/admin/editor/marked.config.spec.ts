@@ -78,4 +78,41 @@ describe("marked.config", () => {
       expect(result).toContain("<code>code</code>");
     });
   });
+
+  describe("download links", () => {
+    it("should render [text](url){download} as anchor with download attribute", () => {
+      const result = marked.parse(
+        "[Get it](/files/foo.md){download}",
+      ) as string;
+      expect(result).toContain('<a href="/files/foo.md" download>');
+      expect(result).toContain("Get it</a>");
+    });
+
+    it("should support {download=filename} with explicit filename", () => {
+      const result = marked.parse(
+        "[Save](/files/foo.md){download=bar.md}",
+      ) as string;
+      expect(result).toContain(
+        '<a href="/files/foo.md" download="bar.md">Save</a>',
+      );
+    });
+
+    it("should render inline markdown inside the link text", () => {
+      const result = marked.parse("[**Bold** text](/x){download}") as string;
+      expect(result).toContain("<strong>Bold</strong>");
+      expect(result).toContain("download>");
+    });
+
+    it("should leave a regular link untouched", () => {
+      const result = marked.parse("[plain](/x)") as string;
+      expect(result).toContain('<a href="/x">plain</a>');
+      expect(result).not.toContain("download");
+    });
+
+    it("should escape HTML in href and filename", () => {
+      const result = marked.parse('[x](/a"b){download=c"d}') as string;
+      expect(result).not.toContain('href="/a"b"');
+      expect(result).toContain("&quot;");
+    });
+  });
 });
