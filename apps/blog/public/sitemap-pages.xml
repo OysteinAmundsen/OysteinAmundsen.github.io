@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://oysteinamundsen.github.io/</loc>
+    <lastmod>2026-04-30T20:09:12.745Z</lastmod>
+  </url>
+  <url>
+    <loc>https://oysteinamundsen.github.io/article/i-ve-created-a-library</loc>
+    <lastmod>2026-03-28T21:47:04.609Z</lastmod>
+  </url>
+  <url>
+    <loc>https://oysteinamundsen.github.io/article/angular-ssr-meets-nestjs-lessons-learned-from-a-single-express-instance</loc>
+    <lastmod>2026-04-10T19:24:29.744Z</lastmod>
+  </url>
+  <url>
+    <loc>https://oysteinamundsen.github.io/article/welcome-to-my-blog</loc>
+    <lastmod>2026-04-03T19:46:10.654Z</lastmod>
+  </url>
+  <url>
+    <loc>https://oysteinamundsen.github.io/article/we-benchmarked-our-grid-against-ag-grid-here-are-the-numbers</loc>
+    <lastmod>2026-04-10T16:07:20.878Z</lastmod>
+  </url>
+  <url>
+    <loc>https://oysteinamundsen.github.io/article/toolbox-grid-v2</loc>
+    <lastmod>2026-04-17T16:07:10.647Z</lastmod>
+  </url>
+  <url>
+    <loc>https://oysteinamundsen.github.io/article/give-your-agent-a-mental-model</loc>
+    <lastmod>2026-04-24T17:30:47.522Z</lastmod>
+  </url>
+</urlset>

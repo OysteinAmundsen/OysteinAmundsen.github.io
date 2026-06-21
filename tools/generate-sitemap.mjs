@@ -14,7 +14,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const articlesPath = resolve(__dirname, "../data/articles.json");
 const publicDir = resolve(__dirname, "../apps/blog/public");
 
-const SITE_URL = "https://oysteinamundsen.github.io";
+const SITE_URL = "https://oysteinamundsen.github.io/";
 
 const articles = JSON.parse(readFileSync(articlesPath, "utf-8"));
 const published = articles.filter((a) => a.status === "published");
