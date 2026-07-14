@@ -3,10 +3,14 @@ import { Router } from "@angular/router";
 import { Article, ArticleService, ArticleStatus } from "@blog/shared";
 import type { ColumnConfig, GridConfig } from "@toolbox-web/grid";
 import { Grid } from "@toolbox-web/grid-angular";
-import { injectGridFiltering } from "@toolbox-web/grid-angular/features/filtering";
 import "@toolbox-web/grid-angular/features/filtering";
+import { injectGridFiltering } from "@toolbox-web/grid-angular/features/filtering";
 import "@toolbox-web/grid-angular/features/pinned-rows";
 import "@toolbox-web/grid-angular/features/selection";
+import {
+  filteredCountPanel,
+  rowCountPanel,
+} from "@toolbox-web/grid/plugins/pinned-rows";
 
 @Component({
   selector: "app-admin-articles",
@@ -167,8 +171,14 @@ export class AdminArticlesComponent {
       selection: "row",
       filtering: true,
       pinnedRows: {
-        showRowCount: true,
-        showFilteredCount: true,
+        slots: [
+          { id: "row-count", position: "bottom", render: rowCountPanel() },
+          {
+            id: "filtered-count",
+            position: "bottom",
+            render: filteredCountPanel(),
+          },
+        ],
       },
     },
   };

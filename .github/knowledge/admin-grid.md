@@ -29,5 +29,6 @@ related: [article-data, styling-theme]
 
 ## gridConfig
 
-- OWNS: feature toggles — `selection: 'row'`, `filtering: true`, `pinnedRows: { showRowCount, showFilteredCount }`
+- OWNS: feature toggles — `selection: 'row'`, `filtering: true`, `pinnedRows: { slots: [...] }`
+- INVARIANT: pinned-rows status panels are configured through `slots[]` using built-in renderers (`rowCountPanel()`, `filteredCountPanel()`) rather than legacy `show*` flags
 - INVARIANT: pinned-rows feature shows total + filtered count at bottom — relies on filtering feature being registered
